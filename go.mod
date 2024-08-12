@@ -1,4 +1,4 @@
-module github.com/ethereum/go-ethereum
+module github.com/tenderly/net-optimism
 
 go 1.21
 
