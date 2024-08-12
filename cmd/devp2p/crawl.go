@@ -22,8 +22,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/enode"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/p2p/enode"
 )
 
 type crawler struct {
