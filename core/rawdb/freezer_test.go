@@ -27,9 +27,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/core/rawdb/ancienttest"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/core/rawdb/ancienttest"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/rlp"
 	"github.com/stretchr/testify/require"
 )
 

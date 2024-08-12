@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/ethereum-optimism/superchain-registry/superchain"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/tenderly/net-optimism/common"
 )
 
 var OPStackSupport = ProtocolVersionV0{Build: [8]byte{}, Major: 8, Minor: 0, Patch: 0, PreRelease: 1}.Encode()

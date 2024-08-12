@@ -25,17 +25,17 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/lru"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/bloombits"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/lru"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/bloombits"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/event"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // Config represents the configuration of the filter system.

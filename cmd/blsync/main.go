@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ethereum/go-ethereum/beacon/blsync"
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/internal/debug"
-	"github.com/ethereum/go-ethereum/internal/flags"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/beacon/blsync"
+	"github.com/tenderly/net-optimism/cmd/utils"
+	"github.com/tenderly/net-optimism/internal/debug"
+	"github.com/tenderly/net-optimism/internal/flags"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/node"
+	"github.com/tenderly/net-optimism/rpc"
 	"github.com/urfave/cli/v2"
 )
 
