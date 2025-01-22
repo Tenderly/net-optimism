@@ -590,12 +590,8 @@ func (b *batch) Replay(w ethdb.KeyValueWriter) error {
 	reader := b.b.Reader()
 	for {
 		kind, k, v, ok, err := reader.Next()
-		// TODO (nebojsahorvat) are we sure this is ok?
-		if err != nil {
-			break
-		}
-		if !ok {
-			break
+		if !ok || err != nil {
+			return err
 		}
 		// The (k,v) slices might be overwritten if the batch is reset/reused,
 		// and the receiver should copy them if they are to be retained long-term.
