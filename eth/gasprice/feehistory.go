@@ -25,11 +25,11 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/consensus/misc/eip1559"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/consensus/misc/eip1559"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rpc"
 	"golang.org/x/exp/slices"
 )
 

@@ -5,10 +5,10 @@ import (
 	"math/big"
 	"sort"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // SuggestOptimismPriorityFee returns a max priority fee value that can be used such that newly

@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/eth/downloader"
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/eth/downloader"
+	"github.com/tenderly/net-optimism/eth/ethconfig"
+	"github.com/tenderly/net-optimism/node"
+	"github.com/tenderly/net-optimism/params"
 )
 
 func TestSignalSuperchainV1(t *testing.T) {

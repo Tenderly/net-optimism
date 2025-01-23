@@ -23,21 +23,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/consensus"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/asm"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/eth/tracers"
-	"github.com/ethereum/go-ethereum/eth/tracers/logger"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/accounts/abi"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/consensus"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/asm"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/state"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/core/vm"
+	"github.com/tenderly/net-optimism/eth/tracers"
+	"github.com/tenderly/net-optimism/eth/tracers/logger"
+	"github.com/tenderly/net-optimism/params"
 
 	// force-load js tracers to trigger registration
-	_ "github.com/ethereum/go-ethereum/eth/tracers/js"
+	_ "github.com/tenderly/net-optimism/eth/tracers/js"
 	"github.com/holiman/uint256"
 )
 
@@ -600,7 +600,7 @@ func TestEip2929Cases(t *testing.T) {
 
 // TestColdAccountAccessCost test that the cold account access cost is reported
 // correctly
-// see: https://github.com/ethereum/go-ethereum/issues/22649
+// see: https://github.com/tenderly/net-optimism/issues/22649
 func TestColdAccountAccessCost(t *testing.T) {
 	for i, tc := range []struct {
 		code []byte

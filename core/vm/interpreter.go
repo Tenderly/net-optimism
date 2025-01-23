@@ -17,11 +17,11 @@
 package vm
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/params"
 )
 
 // PrecompileOverrides is a function that can be used to override the default precompiled contracts

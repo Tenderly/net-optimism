@@ -5,8 +5,8 @@ import (
 
 	"github.com/ethereum-optimism/superchain-registry/superchain"
 
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/triedb"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/triedb"
 )
 
 func TestOPStackGenesis(t *testing.T) {

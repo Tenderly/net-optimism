@@ -26,11 +26,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/bitutil"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p/rlpx"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/bitutil"
+	"github.com/tenderly/net-optimism/metrics"
+	"github.com/tenderly/net-optimism/p2p/rlpx"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 const (

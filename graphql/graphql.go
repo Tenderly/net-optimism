@@ -27,17 +27,17 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/consensus/misc/eip1559"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/filters"
-	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/consensus/misc/eip1559"
+	"github.com/tenderly/net-optimism/core/state"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/eth/filters"
+	"github.com/tenderly/net-optimism/internal/ethapi"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 var (
