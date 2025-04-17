@@ -23,6 +23,7 @@ require (
 	github.com/donovanhide/eventsource v0.0.0-20210830082556-c59027999da0
 	github.com/dop251/goja v0.0.0-20230806174421-c933cf95e127
 	github.com/ethereum/c-kzg-4844 v1.0.0
+	github.com/ethereum/go-ethereum v1.15.2
 	github.com/ethereum/go-verkle v0.2.2
 	github.com/fatih/color v1.16.0
 	github.com/ferranbt/fastssz v0.1.2
