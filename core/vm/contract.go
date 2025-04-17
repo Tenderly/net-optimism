@@ -165,7 +165,3 @@ func (c *Contract) SetCallCode(addr *common.Address, hash common.Hash, code []by
 	c.CodeHash = hash
 	c.CodeAddr = addr
 }
-
-func (c *Contract) SetCodeOptionalHash(addr *common.Address) {
-	c.CodeAddr = addr
-}
