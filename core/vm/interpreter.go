@@ -19,12 +19,12 @@ package vm
 import (
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/core/tracing"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/params"
 	"github.com/holiman/uint256"
 )
 

@@ -27,9 +27,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 // The values in those tests are from the Transaction Tests

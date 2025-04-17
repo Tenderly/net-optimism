@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/params/forks"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/params/forks"
 )
 
 var (

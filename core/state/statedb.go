@@ -26,18 +26,18 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/state/snapshot"
-	"github.com/ethereum/go-ethereum/core/stateless"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/trie"
-	"github.com/ethereum/go-ethereum/trie/trienode"
-	"github.com/ethereum/go-ethereum/trie/utils"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/state/snapshot"
+	"github.com/tenderly/net-optimism/core/stateless"
+	"github.com/tenderly/net-optimism/core/tracing"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/trie"
+	"github.com/tenderly/net-optimism/trie/trienode"
+	"github.com/tenderly/net-optimism/trie/utils"
 	"github.com/holiman/uint256"
 )
 
@@ -211,7 +211,7 @@ func (s *StateDB) StartPrefetcher(namespace string, witness *stateless.Witness) 
 	//
 	// To prevent this, the account trie is always scheduled for prefetching once
 	// the prefetcher is constructed. For more details, see:
-	// https://github.com/ethereum/go-ethereum/issues/29880
+	// https://github.com/tenderly/net-optimism/issues/29880
 	s.prefetcher = newTriePrefetcher(s.db, s.originalRoot, namespace, witness == nil)
 	if err := s.prefetcher.prefetch(common.Hash{}, s.originalRoot, common.Address{}, nil, nil, false); err != nil {
 		log.Error("Failed to prefetch account trie", "root", s.originalRoot, "err", err)
