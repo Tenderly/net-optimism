@@ -21,13 +21,13 @@ import (
 	"math/big"
 	"sync/atomic"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/state"
 	"github.com/tenderly/net-optimism/core/tracing"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/params"
-	"github.com/holiman/uint256"
 )
 
 type (
@@ -251,7 +251,7 @@ func (evm *EVM) Call(caller common.Address, addr common.Address, input []byte, g
 			// The contract is a scoped environment for this execution context only.
 			contract := NewContract(caller, addr, value, gas, evm.jumpDests)
 			contract.IsSystemCall = isSystemCall(caller)
-			contract.SetCallCode(evm.resolveCodeHash(addr), code)
+			contract.SetCallCode(&addr, evm.resolveCodeHash(addr), code)
 			ret, err = evm.interpreter.Run(contract, input, false)
 			gas = contract.Gas
 		}
@@ -311,7 +311,7 @@ func (evm *EVM) CallCode(caller common.Address, addr common.Address, input []byt
 		// Initialise a new contract and set the code that is to be used by the EVM.
 		// The contract is a scoped environment for this execution context only.
 		contract := NewContract(caller, caller, value, gas, evm.jumpDests)
-		contract.SetCallCode(evm.resolveCodeHash(addr), evm.resolveCode(addr))
+		contract.SetCallCode(&addr, evm.resolveCodeHash(addr), evm.resolveCode(addr))
 		ret, err = evm.interpreter.Run(contract, input, false)
 		gas = contract.Gas
 	}
@@ -356,7 +356,7 @@ func (evm *EVM) DelegateCall(originCaller common.Address, caller common.Address,
 		//
 		// Note: The value refers to the original value from the parent call.
 		contract := NewContract(originCaller, caller, value, gas, evm.jumpDests)
-		contract.SetCallCode(evm.resolveCodeHash(addr), evm.resolveCode(addr))
+		contract.SetCallCode(&addr, evm.resolveCodeHash(addr), evm.resolveCode(addr))
 		ret, err = evm.interpreter.Run(contract, input, false)
 		gas = contract.Gas
 	}
@@ -408,7 +408,7 @@ func (evm *EVM) StaticCall(caller common.Address, addr common.Address, input []b
 		// Initialise a new contract and set the code that is to be used by the EVM.
 		// The contract is a scoped environment for this execution context only.
 		contract := NewContract(caller, addr, new(uint256.Int), gas, evm.jumpDests)
-		contract.SetCallCode(evm.resolveCodeHash(addr), evm.resolveCode(addr))
+		contract.SetCallCode(&addr, evm.resolveCodeHash(addr), evm.resolveCode(addr))
 
 		// When an error was returned by the EVM or when setting the creation code
 		// above we revert to the snapshot and consume any gas remaining. Additionally
@@ -518,7 +518,7 @@ func (evm *EVM) create(caller common.Address, code []byte, gas uint64, value *ui
 
 	// Explicitly set the code to a null hash to prevent caching of jump analysis
 	// for the initialization code.
-	contract.SetCallCode(common.Hash{}, code)
+	contract.SetCallCode(&address, common.Hash{}, code)
 	contract.IsDeployment = true
 
 	ret, err = evm.initNewContract(contract, address)
