@@ -425,6 +425,9 @@ type ChainConfig struct {
 
 	InteropTime *uint64 `json:"interopTime,omitempty"` // Interop switch time (nil = no fork, 0 = already on optimism interop)
 
+	// Zircuit forks
+	ZircuitMonoBlock *big.Int `json:"zircuitMonoBlock,omitempty"`
+
 	// TerminalTotalDifficulty is the amount of total difficulty reached by
 	// the network that triggers the consensus upgrade.
 	TerminalTotalDifficulty *big.Int `json:"terminalTotalDifficulty,omitempty"`
@@ -811,6 +814,10 @@ func (c *ChainConfig) IsOptimismIsthmus(time uint64) bool {
 
 func (c *ChainConfig) IsOptimismJovian(time uint64) bool {
 	return c.IsOptimism() && c.IsJovian(time)
+}
+
+func (c *ChainConfig) IsZircuitMonoFee(number *big.Int) bool {
+	return isBlockForked(c.ZircuitMonoBlock, number)
 }
 
 // IsOptimismPreBedrock returns true iff this is an optimism node & bedrock is not yet active
@@ -1261,6 +1268,7 @@ type Rules struct {
 	IsOptimismCanyon, IsOptimismFjord                       bool
 	IsOptimismGranite, IsOptimismHolocene                   bool
 	IsOptimismIsthmus                                       bool
+	IsZircuitMonoBlock                                      bool
 }
 
 // Rules ensures c's ChainID is not nil.
@@ -1300,6 +1308,7 @@ func (c *ChainConfig) Rules(num *big.Int, isMerge bool, timestamp uint64) Rules 
 		IsOptimismGranite:  isMerge && c.IsOptimismGranite(timestamp),
 		IsOptimismHolocene: isMerge && c.IsOptimismHolocene(timestamp),
 		IsOptimismIsthmus:  isMerge && c.IsOptimismIsthmus(timestamp),
+		IsZircuitMonoBlock: isMerge && c.IsZircuitMonoFee(num),
 	}
 }
 

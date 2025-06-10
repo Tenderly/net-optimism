@@ -22,13 +22,13 @@ import (
 	"math"
 	"math/big"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/tracing"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/core/vm"
 	"github.com/tenderly/net-optimism/crypto/kzg4844"
 	"github.com/tenderly/net-optimism/params"
-	"github.com/holiman/uint256"
 )
 
 // ExecutionResult includes all output after executing given evm
@@ -521,7 +521,7 @@ func (st *stateTransition) innerExecute() (*ExecutionResult, error) {
 		return nil, fmt.Errorf("%w: have %d, want %d", ErrIntrinsicGas, st.gasRemaining, gas)
 	}
 	// Gas limit suffices for the floor data cost (EIP-7623)
-	if rules.IsPrague {
+	if rules.IsPrague && !rules.IsZircuitMonoBlock {
 		floorDataGas, err = FloorDataGas(msg.Data)
 		if err != nil {
 			return nil, err
@@ -616,7 +616,7 @@ func (st *stateTransition) innerExecute() (*ExecutionResult, error) {
 	// Compute refund counter, capped to a refund quotient.
 	gasRefund := st.calcRefund()
 	st.gasRemaining += gasRefund
-	if rules.IsPrague {
+	if rules.IsPrague && !rules.IsZircuitMonoBlock {
 		// After EIP-7623: Data-heavy transactions pay the floor gas.
 		if st.gasUsed() < floorDataGas {
 			prev := st.gasRemaining

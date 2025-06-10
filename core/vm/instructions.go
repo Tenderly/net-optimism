@@ -19,12 +19,12 @@ package vm
 import (
 	"math"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/tracing"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/params"
-	"github.com/holiman/uint256"
 )
 
 func opAdd(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
@@ -888,6 +888,10 @@ func opStop(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byt
 }
 
 func opSelfdestruct(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	if interpreter.evm.chainConfig.IsZircuitMonoFee(interpreter.evm.Context.BlockNumber) {
+		return opUndefined(pc, interpreter, scope)
+	}
+
 	if interpreter.readOnly {
 		return nil, ErrWriteProtection
 	}
@@ -907,6 +911,10 @@ func opSelfdestruct(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext
 }
 
 func opSelfdestruct6780(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	if interpreter.evm.chainConfig.IsZircuitMonoFee(interpreter.evm.Context.BlockNumber) {
+		return opUndefined(pc, interpreter, scope)
+	}
+
 	if interpreter.readOnly {
 		return nil, ErrWriteProtection
 	}
