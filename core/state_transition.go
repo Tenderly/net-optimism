@@ -521,7 +521,7 @@ func (st *stateTransition) innerExecute() (*ExecutionResult, error) {
 		return nil, fmt.Errorf("%w: have %d, want %d", ErrIntrinsicGas, st.gasRemaining, gas)
 	}
 	// Gas limit suffices for the floor data cost (EIP-7623)
-	if rules.IsPrague && !rules.IsZircuitMonoBlock {
+	if rules.IsPrague && (!rules.IsZircuitMonoFee || rules.IsZircuitTenrec) {
 		floorDataGas, err = FloorDataGas(msg.Data)
 		if err != nil {
 			return nil, err
@@ -616,7 +616,7 @@ func (st *stateTransition) innerExecute() (*ExecutionResult, error) {
 	// Compute refund counter, capped to a refund quotient.
 	gasRefund := st.calcRefund()
 	st.gasRemaining += gasRefund
-	if rules.IsPrague && !rules.IsZircuitMonoBlock {
+	if rules.IsPrague && (!rules.IsZircuitMonoFee || rules.IsZircuitTenrec) {
 		// After EIP-7623: Data-heavy transactions pay the floor gas.
 		if st.gasUsed() < floorDataGas {
 			prev := st.gasRemaining
