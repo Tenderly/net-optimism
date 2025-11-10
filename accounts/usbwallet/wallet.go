@@ -25,13 +25,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/karalabe/usb"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/karalabe/hid"
 )
 
 // Maximum time between wallet health checks to detect USB unplugs.
@@ -79,8 +79,8 @@ type wallet struct {
 	driver driver        // Hardware implementation of the low level device operations
 	url    *accounts.URL // Textual URL uniquely identifying this wallet
 
-	info   usb.DeviceInfo // Known USB device infos about the wallet
-	device usb.Device     // USB device advertising itself as a hardware wallet
+	info   hid.DeviceInfo // Known USB device infos about the wallet
+	device hid.Device     // USB device advertising itself as a hardware wallet
 
 	accounts []accounts.Account                         // List of derive accounts pinned on the hardware wallet
 	paths    map[common.Address]accounts.DerivationPath // Known derivation paths for signing operations

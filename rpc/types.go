@@ -24,8 +24,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
 )
 
 // API describes the set of methods offered over the RPC interface
@@ -38,7 +38,7 @@ type API struct {
 }
 
 // ServerCodec implements reading, parsing and writing RPC messages for the server side of
-// a RPC session. Implementations must be go-routine safe since the codec can be called in
+// an RPC session. Implementations must be go-routine safe since the codec can be called in
 // multiple go-routines concurrently.
 type ServerCodec interface {
 	peerInfo() PeerInfo

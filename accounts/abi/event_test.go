@@ -25,8 +25,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/crypto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -331,7 +331,6 @@ func TestEventTupleUnpack(t *testing.T) {
 
 	for _, tc := range testCases {
 		assert := assert.New(t)
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			err := unpackTestEventData(tc.dest, tc.data, tc.jsonLog, assert)
 			if tc.error == "" {

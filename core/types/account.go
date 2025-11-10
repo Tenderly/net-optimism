@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/common/math"
 )
 
 //go:generate go run github.com/fjl/gencodec -type Account -field-override accountMarshaling -out gen_account.go
@@ -52,7 +52,7 @@ type accountMarshaling struct {
 }
 
 // storageJSON represents a 256 bit byte array, but allows less than 256 bits when
-// unmarshaling from hex.
+// unmarshalling from hex.
 type storageJSON common.Hash
 
 func (h *storageJSON) UnmarshalText(text []byte) error {

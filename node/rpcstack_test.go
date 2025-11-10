@@ -28,9 +28,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/internal/testlog"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/internal/testlog"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rpc"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
@@ -383,7 +383,7 @@ func TestJWT(t *testing.T) {
 	expFail := []func() string{
 		// future
 		func() string {
-			return fmt.Sprintf("Bearer %v", issueToken(secret, nil, testClaim{"iat": time.Now().Unix() + int64(jwtExpiryTimeout.Seconds()) + 1}))
+			return fmt.Sprintf("Bearer %v", issueToken(secret, nil, testClaim{"iat": time.Now().Unix() + int64(jwtExpiryTimeout.Seconds()) + 60}))
 		},
 		// stale
 		func() string {
@@ -522,7 +522,6 @@ func TestGzipHandler(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		test := test
 		t.Run(test.name, func(t *testing.T) {
 			srv := httptest.NewServer(newGzipHandler(test.handler))
 			defer srv.Close()

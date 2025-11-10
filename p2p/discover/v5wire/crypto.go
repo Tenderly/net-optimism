@@ -25,9 +25,9 @@ import (
 	"fmt"
 	"hash"
 
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/p2p/enode"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/p2p/enode"
 	"golang.org/x/crypto/hkdf"
 )
 
@@ -129,9 +129,7 @@ func deriveKeys(hash hashFn, priv *ecdsa.PrivateKey, pub *ecdsa.PublicKey, n1, n
 	sec := session{writeKey: make([]byte, aesKeySize), readKey: make([]byte, aesKeySize)}
 	kdf.Read(sec.writeKey)
 	kdf.Read(sec.readKey)
-	for i := range eph {
-		eph[i] = 0
-	}
+	clear(eph)
 	return &sec
 }
 

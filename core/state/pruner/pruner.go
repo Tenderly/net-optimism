@@ -27,15 +27,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/state/snapshot"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
-	"github.com/ethereum/go-ethereum/triedb"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/state/snapshot"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/trie"
+	"github.com/tenderly/net-optimism/triedb"
 )
 
 const (
@@ -270,11 +270,10 @@ func (p *Pruner) Prune(root common.Hash) error {
 	// is the presence of root can indicate the presence of the
 	// entire trie.
 	if !rawdb.HasLegacyTrieNode(p.db, root) {
-		// The special case is for clique based networks(goerli
-		// and some other private networks), it's possible that two
-		// consecutive blocks will have same root. In this case snapshot
-		// difflayer won't be created. So HEAD-127 may not paired with
-		// head-127 layer. Instead the paired layer is higher than the
+		// The special case is for clique based networks, it's possible
+		// that two consecutive blocks will have same root. In this case
+		// snapshot difflayer won't be created. So HEAD-127 may not paired
+		// with head-127 layer. Instead the paired layer is higher than the
 		// bottom-most diff layer. Try to find the bottom-most snapshot
 		// layer with state available.
 		//

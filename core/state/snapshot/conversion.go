@@ -25,13 +25,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/trie"
 )
 
 // trieKV represents a trie key-value pair
@@ -49,16 +49,6 @@ type (
 	// returns the subtrie root with the specified subtrie identifier.
 	leafCallbackFn func(db ethdb.KeyValueWriter, accountHash, codeHash common.Hash, stat *generateStats) (common.Hash, error)
 )
-
-// GenerateAccountTrieRoot takes an account iterator and reproduces the root hash.
-func GenerateAccountTrieRoot(it AccountIterator) (common.Hash, error) {
-	return generateTrieRoot(nil, "", it, common.Hash{}, stackTrieGenerate, nil, newGenerateStats(), true)
-}
-
-// GenerateStorageTrieRoot takes a storage iterator and reproduces the root hash.
-func GenerateStorageTrieRoot(account common.Hash, it StorageIterator) (common.Hash, error) {
-	return generateTrieRoot(nil, "", it, account, stackTrieGenerate, nil, newGenerateStats(), true)
-}
 
 // GenerateTrie takes the whole snapshot tree as the input, traverses all the
 // accounts as well as the corresponding storages and regenerate the whole state

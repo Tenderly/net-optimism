@@ -22,8 +22,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/internal/version"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/internal/version"
 	"github.com/urfave/cli/v2"
 )
 
@@ -73,14 +72,14 @@ func printVersion(ctx *cli.Context) error {
 	git, _ := version.VCS()
 
 	fmt.Println(strings.Title(clientIdentifier))
-	fmt.Println("Version:", params.VersionWithMeta)
+	fmt.Println("Version:", version.WithMeta)
 	if git.Commit != "" {
 		fmt.Println("Git Commit:", git.Commit)
 	}
 	if git.Date != "" {
 		fmt.Println("Git Commit Date:", git.Date)
 	}
-	fmt.Println("Upstream Version:", params.GethVersionWithMeta)
+	fmt.Println("Upstream Version:", version.UpstreamGethWithMeta)
 	fmt.Println("Architecture:", runtime.GOARCH)
 	fmt.Println("Go Version:", runtime.Version())
 	fmt.Println("Operating System:", runtime.GOOS)

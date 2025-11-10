@@ -23,20 +23,25 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/metrics/internal"
+	"github.com/tenderly/net-optimism/metrics"
+	"github.com/tenderly/net-optimism/metrics/internal"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 )
 
 func TestMain(m *testing.M) {
-	metrics.Enabled = true
+	metrics.Enable()
 	os.Exit(m.Run())
 }
 
 func TestExampleV1(t *testing.T) {
+	if runtime.GOARCH == "arm64" {
+		t.Skip("test skipped on ARM64 due to floating point precision differences")
+	}
+
 	r := internal.ExampleMetrics()
 	var have, want string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -69,6 +74,10 @@ func TestExampleV1(t *testing.T) {
 }
 
 func TestExampleV2(t *testing.T) {
+	if runtime.GOARCH == "arm64" {
+		t.Skip("test skipped on ARM64 due to floating point precision differences")
+	}
+
 	r := internal.ExampleMetrics()
 	var have, want string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -19,17 +19,17 @@ package main
 import (
 	"errors"
 	"fmt"
-	"net"
+	"net/netip"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/forkid"
-	"github.com/ethereum/go-ethereum/p2p/enr"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/forkid"
+	"github.com/tenderly/net-optimism/p2p/enr"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rlp"
 	"github.com/urfave/cli/v2"
 )
 
@@ -205,11 +205,11 @@ func trueFilter(args []string) (nodeFilter, error) {
 }
 
 func ipFilter(args []string) (nodeFilter, error) {
-	_, cidr, err := net.ParseCIDR(args[0])
+	prefix, err := netip.ParsePrefix(args[0])
 	if err != nil {
 		return nil, err
 	}
-	f := func(n nodeJSON) bool { return cidr.Contains(n.N.IP()) }
+	f := func(n nodeJSON) bool { return prefix.Contains(n.N.IPAddr()) }
 	return f, nil
 }
 
@@ -230,8 +230,6 @@ func ethFilter(args []string) (nodeFilter, error) {
 	switch args[0] {
 	case "mainnet":
 		filter = forkid.NewStaticFilter(params.MainnetChainConfig, core.DefaultGenesisBlock().ToBlock())
-	case "goerli":
-		filter = forkid.NewStaticFilter(params.GoerliChainConfig, core.DefaultGoerliGenesisBlock().ToBlock())
 	case "sepolia":
 		filter = forkid.NewStaticFilter(params.SepoliaChainConfig, core.DefaultSepoliaGenesisBlock().ToBlock())
 	case "holesky":

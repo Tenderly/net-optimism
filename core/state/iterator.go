@@ -21,10 +21,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/trie"
 )
 
 // nodeIterator is an iterator to traverse the entire state trie post-order,
@@ -46,7 +46,7 @@ type nodeIterator struct {
 	Error error // Failure set in case of an internal error in the iterator
 }
 
-// newNodeIterator creates an post-order state node iterator.
+// newNodeIterator creates a post-order state node iterator.
 func newNodeIterator(state *StateDB) *nodeIterator {
 	return &nodeIterator{
 		state: state,
@@ -136,9 +136,12 @@ func (it *nodeIterator) step() error {
 	}
 	if !bytes.Equal(account.CodeHash, types.EmptyCodeHash.Bytes()) {
 		it.codeHash = common.BytesToHash(account.CodeHash)
-		it.code, err = it.state.db.ContractCode(address, common.BytesToHash(account.CodeHash))
+		it.code, err = it.state.reader.Code(address, common.BytesToHash(account.CodeHash))
 		if err != nil {
 			return fmt.Errorf("code %x: %v", account.CodeHash, err)
+		}
+		if len(it.code) == 0 {
+			return fmt.Errorf("code is not found: %x", account.CodeHash)
 		}
 	}
 	it.accountHash = it.stateIt.Parent()

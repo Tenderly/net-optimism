@@ -24,12 +24,12 @@ import (
 	"sort"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/eth/protocols/eth"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/log"
 )
 
 // scratchHeaders is the number of headers to store in a scratch space to allow
@@ -1130,6 +1130,16 @@ func (s *skeleton) cleanStales(filled *types.Header) error {
 	}
 	// If nothing in subchain is filled, don't bother to do cleanup.
 	if number+1 == s.progress.Subchains[0].Tail {
+		return nil
+	}
+	// If the latest fill was on a different subchain, it means the backfiller
+	// was interrupted before it got to do any meaningful work, no cleanup
+	header := rawdb.ReadSkeletonHeader(s.db, filled.Number.Uint64())
+	if header == nil {
+		log.Debug("Filled header outside of skeleton range", "number", number, "head", s.progress.Subchains[0].Head, "tail", s.progress.Subchains[0].Tail)
+		return nil
+	} else if header.Hash() != filled.Hash() {
+		log.Debug("Filled header on different sidechain", "number", number, "filled", filled.Hash(), "skeleton", header.Hash())
 		return nil
 	}
 	var (

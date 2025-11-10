@@ -22,9 +22,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/common/math"
 )
 
 var (
@@ -71,7 +71,7 @@ func TestVerifySignature(t *testing.T) {
 	wrongkey := common.CopyBytes(testpubkey)
 	wrongkey[10]++
 	if VerifySignature(wrongkey, testmsg, sig) {
-		t.Errorf("signature valid with with wrong public key")
+		t.Errorf("signature valid with wrong public key")
 	}
 }
 

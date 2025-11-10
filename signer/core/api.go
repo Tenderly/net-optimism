@@ -26,18 +26,18 @@ import (
 	"os"
 	"reflect"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/accounts/keystore"
-	"github.com/ethereum/go-ethereum/accounts/scwallet"
-	"github.com/ethereum/go-ethereum/accounts/usbwallet"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
-	"github.com/ethereum/go-ethereum/signer/storage"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/accounts/keystore"
+	"github.com/tenderly/net-optimism/accounts/scwallet"
+	"github.com/tenderly/net-optimism/accounts/usbwallet"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/internal/ethapi"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rpc"
+	"github.com/tenderly/net-optimism/signer/core/apitypes"
+	"github.com/tenderly/net-optimism/signer/storage"
 )
 
 const (
@@ -184,9 +184,7 @@ func StartClefAccountManager(ksLocation string, nousb, lightKDF bool, scpath str
 			}
 		}
 	}
-
-	// Clef doesn't allow insecure http account unlock.
-	return accounts.NewManager(&accounts.Config{InsecureUnlockAllowed: false}, backends...)
+	return accounts.NewManager(nil, backends...)
 }
 
 // MetadataFromContext extracts Metadata from a given context.Context
@@ -590,7 +588,10 @@ func (api *SignerAPI) SignTransaction(ctx context.Context, args apitypes.SendTxA
 		return nil, err
 	}
 	// Convert fields into a real transaction
-	var unsignedTx = result.Transaction.ToTransaction()
+	unsignedTx, err := result.Transaction.ToTransaction()
+	if err != nil {
+		return nil, err
+	}
 	// Get the password for the transaction
 	pw, err := api.lookupOrQueryPassword(acc.Address, "Account password",
 		fmt.Sprintf("Please enter the password for account %s", acc.Address.String()))
@@ -663,7 +664,7 @@ func (api *SignerAPI) SignGnosisSafeTx(ctx context.Context, signerAddress common
 	return &gnosisTx, nil
 }
 
-// Returns the external api version. This method does not require user acceptance. Available methods are
+// Version returns the external api version. This method does not require user acceptance. Available methods are
 // available via enumeration anyway, and this info does not contain user-specific data
 func (api *SignerAPI) Version(ctx context.Context) (string, error) {
 	return ExternalAPIVersion, nil

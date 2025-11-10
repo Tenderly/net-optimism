@@ -25,12 +25,12 @@ import (
 	"runtime"
 	"runtime/debug"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/p2p"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // Client is a wrapper around rpc.Client that implements geth-specific functionality.
@@ -245,6 +245,12 @@ func toCallArg(msg ethereum.CallMsg) interface{} {
 	if msg.AccessList != nil {
 		arg["accessList"] = msg.AccessList
 	}
+	if msg.BlobGasFeeCap != nil {
+		arg["maxFeePerBlobGas"] = (*hexutil.Big)(msg.BlobGasFeeCap)
+	}
+	if msg.BlobHashes != nil {
+		arg["blobVersionedHashes"] = msg.BlobHashes
+	}
 	return arg
 }
 
@@ -322,9 +328,9 @@ func (o BlockOverrides) MarshalJSON() ([]byte, error) {
 		Difficulty *hexutil.Big    `json:"difficulty,omitempty"`
 		Time       hexutil.Uint64  `json:"time,omitempty"`
 		GasLimit   hexutil.Uint64  `json:"gasLimit,omitempty"`
-		Coinbase   *common.Address `json:"coinbase,omitempty"`
-		Random     *common.Hash    `json:"random,omitempty"`
-		BaseFee    *hexutil.Big    `json:"baseFee,omitempty"`
+		Coinbase   *common.Address `json:"feeRecipient,omitempty"`
+		Random     *common.Hash    `json:"prevRandao,omitempty"`
+		BaseFee    *hexutil.Big    `json:"baseFeePerGas,omitempty"`
 	}
 
 	output := override{

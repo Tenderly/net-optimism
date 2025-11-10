@@ -20,10 +20,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/enr"
-	"github.com/ethereum/go-ethereum/p2p/nat"
+	"github.com/tenderly/net-optimism/common/mclock"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/p2p/enr"
+	"github.com/tenderly/net-optimism/p2p/nat"
 )
 
 const (
@@ -125,7 +125,7 @@ func (srv *Server) portMappingLoop() {
 			if err != nil {
 				log.Debug("Couldn't get external IP", "err", err, "interface", srv.NAT)
 			} else if !ip.Equal(lastExtIP) {
-				log.Debug("External IP changed", "ip", extip, "interface", srv.NAT)
+				log.Debug("External IP changed", "ip", ip, "interface", srv.NAT)
 			} else {
 				continue
 			}

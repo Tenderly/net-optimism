@@ -20,10 +20,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/tenderly/net-optimism/common"
 )
 
-// ErrCommitted is returned when a already committed trie is requested for usage.
+// ErrCommitted is returned when an already committed trie is requested for usage.
 // The potential usages can be `Get`, `Update`, `Delete`, `NodeIterator`, `Prove`
 // and so on.
 var ErrCommitted = errors.New("trie is already committed")

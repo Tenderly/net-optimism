@@ -18,12 +18,13 @@ package params
 
 import (
 	"fmt"
+	"math"
 	"math/big"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/math"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCheckCompatible(t *testing.T) {
@@ -143,6 +144,30 @@ func TestCheckCompatible(t *testing.T) {
 			genesisTimestamp: newUint64(24),
 			wantErr:          nil,
 		},
+		{
+			stored:           &ChainConfig{HoloceneTime: newUint64(10)},
+			new:              &ChainConfig{HoloceneTime: newUint64(20)},
+			headTimestamp:    25,
+			genesisTimestamp: newUint64(15),
+			wantErr: &ConfigCompatError{
+				What:         "Holocene fork timestamp",
+				StoredTime:   newUint64(10),
+				NewTime:      newUint64(20),
+				RewindToTime: 9,
+			},
+		},
+		{
+			stored:           &ChainConfig{HoloceneTime: newUint64(10)},
+			new:              &ChainConfig{HoloceneTime: newUint64(20)},
+			headTimestamp:    15,
+			genesisTimestamp: newUint64(5),
+			wantErr: &ConfigCompatError{
+				What:         "Holocene fork timestamp",
+				StoredTime:   newUint64(10),
+				NewTime:      newUint64(20),
+				RewindToTime: 9,
+			},
+		},
 	}
 
 	for i, test := range tests {
@@ -172,6 +197,23 @@ func TestConfigRules(t *testing.T) {
 	if r := c.Rules(big.NewInt(0), true, stamp); !r.IsShanghai {
 		t.Errorf("expected %v to be shanghai", stamp)
 	}
+}
+
+func TestTimestampCompatError(t *testing.T) {
+	require.Equal(t, new(ConfigCompatError).Error(), "")
+
+	errWhat := "Shanghai fork timestamp"
+	require.Equal(t, newTimestampCompatError(errWhat, nil, newUint64(1681338455)).Error(),
+		"mismatching Shanghai fork timestamp in database (have timestamp nil, want timestamp 1681338455, rewindto timestamp 1681338454)")
+
+	require.Equal(t, newTimestampCompatError(errWhat, newUint64(1681338455), nil).Error(),
+		"mismatching Shanghai fork timestamp in database (have timestamp 1681338455, want timestamp nil, rewindto timestamp 1681338454)")
+
+	require.Equal(t, newTimestampCompatError(errWhat, newUint64(1681338455), newUint64(600624000)).Error(),
+		"mismatching Shanghai fork timestamp in database (have timestamp 1681338455, want timestamp 600624000, rewindto timestamp 600623999)")
+
+	require.Equal(t, newTimestampCompatError(errWhat, newUint64(0), newUint64(1681338455)).Error(),
+		"mismatching Shanghai fork timestamp in database (have timestamp 0, want timestamp 1681338455, rewindto timestamp 0)")
 }
 
 func TestConfigRulesRegolith(t *testing.T) {

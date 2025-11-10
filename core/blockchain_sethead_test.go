@@ -22,21 +22,22 @@ package core
 import (
 	"fmt"
 	"math/big"
-	"path"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/triedb"
-	"github.com/ethereum/go-ethereum/triedb/hashdb"
-	"github.com/ethereum/go-ethereum/triedb/pathdb"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/consensus/ethash"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/state"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/core/vm"
+	"github.com/tenderly/net-optimism/ethdb/pebble"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/triedb"
+	"github.com/tenderly/net-optimism/triedb/hashdb"
+	"github.com/tenderly/net-optimism/triedb/pathdb"
 )
 
 // rewindTest is a test case for chain rollback upon user request.
@@ -1961,20 +1962,20 @@ func testSetHead(t *testing.T, tt *rewindTest, snapshots bool) {
 
 func testSetHeadWithScheme(t *testing.T, tt *rewindTest, snapshots bool, scheme string) {
 	// It's hard to follow the test case, visualize the input
-	// log.Root().SetHandler(log.LvlFilterHandler(log.LvlTrace, log.StreamHandler(os.Stderr, log.TerminalFormat(true))))
+	// log.SetDefault(log.NewLogger(log.NewTerminalHandlerWithLevel(os.Stderr, log.LevelInfo, true)))
 	// fmt.Println(tt.dump(false))
 
 	// Create a temporary persistent database
 	datadir := t.TempDir()
-	ancient := path.Join(datadir, "ancient")
+	ancient := filepath.Join(datadir, "ancient")
 
-	db, err := rawdb.Open(rawdb.OpenOptions{
-		Directory:         datadir,
-		AncientsDirectory: ancient,
-		Ephemeral:         true,
-	})
+	pdb, err := pebble.New(datadir, 0, 0, "", false)
 	if err != nil {
-		t.Fatalf("Failed to create persistent database: %v", err)
+		t.Fatalf("Failed to create persistent key-value database: %v", err)
+	}
+	db, err := rawdb.NewDatabaseWithFreezer(pdb, ancient, "", false)
+	if err != nil {
+		t.Fatalf("Failed to create persistent freezer database: %v", err)
 	}
 	defer db.Close()
 
@@ -1997,7 +1998,7 @@ func testSetHeadWithScheme(t *testing.T, tt *rewindTest, snapshots bool, scheme 
 		config.SnapshotLimit = 256
 		config.SnapshotWait = true
 	}
-	chain, err := NewBlockChain(db, config, gspec, nil, engine, vm.Config{}, nil, nil)
+	chain, err := NewBlockChain(db, config, gspec, nil, engine, vm.Config{}, nil)
 	if err != nil {
 		t.Fatalf("Failed to create chain: %v", err)
 	}
@@ -2040,14 +2041,18 @@ func testSetHeadWithScheme(t *testing.T, tt *rewindTest, snapshots bool, scheme 
 		dbconfig.HashDB = hashdb.Defaults
 	}
 	chain.triedb = triedb.NewDatabase(chain.db, dbconfig)
-	chain.stateCache = state.NewDatabaseWithNodeDB(chain.db, chain.triedb)
+	chain.statedb = state.NewDatabase(chain.triedb, chain.snaps)
 
 	// Force run a freeze cycle
 	type freezer interface {
-		Freeze(threshold uint64) error
+		Freeze() error
 		Ancients() (uint64, error)
 	}
-	db.(freezer).Freeze(tt.freezeThreshold)
+	if tt.freezeThreshold < uint64(tt.canonicalBlocks) {
+		final := uint64(tt.canonicalBlocks) - tt.freezeThreshold
+		chain.SetFinalized(canonblocks[int(final)-1].Header())
+	}
+	db.(freezer).Freeze()
 
 	// Set the simulated pivot block
 	if tt.pivotBlock != nil {

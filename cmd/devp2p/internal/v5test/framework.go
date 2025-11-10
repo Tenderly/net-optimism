@@ -24,11 +24,11 @@ import (
 	"net"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/p2p/discover/v5wire"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/enr"
+	"github.com/tenderly/net-optimism/common/mclock"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/p2p/discover/v5wire"
+	"github.com/tenderly/net-optimism/p2p/enode"
+	"github.com/tenderly/net-optimism/p2p/enr"
 )
 
 // readError represents an error during packet reading.
@@ -251,13 +251,4 @@ func checkRecords(records []*enr.Record) ([]*enode.Node, error) {
 		nodes[i] = n
 	}
 	return nodes, nil
-}
-
-func containsUint(ints []uint, x uint) bool {
-	for i := range ints {
-		if ints[i] == x {
-			return true
-		}
-	}
-	return false
 }

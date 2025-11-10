@@ -21,10 +21,10 @@ import (
 	"crypto/sha256"
 	mrand "math/rand"
 
-	"github.com/ethereum/go-ethereum/beacon/merkle"
-	"github.com/ethereum/go-ethereum/beacon/params"
-	"github.com/ethereum/go-ethereum/beacon/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/tenderly/net-optimism/beacon/merkle"
+	"github.com/tenderly/net-optimism/beacon/params"
+	"github.com/tenderly/net-optimism/beacon/types"
+	"github.com/tenderly/net-optimism/common"
 )
 
 func GenerateTestCommittee() *types.SerializedSyncCommittee {
@@ -33,7 +33,7 @@ func GenerateTestCommittee() *types.SerializedSyncCommittee {
 	return s
 }
 
-func GenerateTestUpdate(config *types.ChainConfig, period uint64, committee, nextCommittee *types.SerializedSyncCommittee, signerCount int, finalizedHeader bool) *types.LightClientUpdate {
+func GenerateTestUpdate(config *params.ChainConfig, period uint64, committee, nextCommittee *types.SerializedSyncCommittee, signerCount int, finalizedHeader bool) *types.LightClientUpdate {
 	update := new(types.LightClientUpdate)
 	update.NextSyncCommitteeRoot = nextCommittee.Root()
 	var attestedHeader types.Header
@@ -48,9 +48,9 @@ func GenerateTestUpdate(config *types.ChainConfig, period uint64, committee, nex
 	return update
 }
 
-func GenerateTestSignedHeader(header types.Header, config *types.ChainConfig, committee *types.SerializedSyncCommittee, signatureSlot uint64, signerCount int) types.SignedHeader {
+func GenerateTestSignedHeader(header types.Header, config *params.ChainConfig, committee *types.SerializedSyncCommittee, signatureSlot uint64, signerCount int) types.SignedHeader {
 	bitmask := makeBitmask(signerCount)
-	signingRoot, _ := config.Forks.SigningRoot(header)
+	signingRoot, _ := config.Forks.SigningRoot(header.Epoch(), header.Hash())
 	c, _ := dummyVerifier{}.deserializeSyncCommittee(committee)
 	return types.SignedHeader{
 		Header: header,

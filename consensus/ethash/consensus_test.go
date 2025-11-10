@@ -26,10 +26,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/params"
 )
 
 type diffTest struct {

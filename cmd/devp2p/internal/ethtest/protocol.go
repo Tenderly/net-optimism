@@ -13,11 +13,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with go-ethereum. If not, see <http://www.gnu.org/licenses/>.
+
 package ethtest
 
 import (
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/p2p"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 // Unexported devp2p message codes from p2p/peer.go.

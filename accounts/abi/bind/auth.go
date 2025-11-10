@@ -23,13 +23,13 @@ import (
 	"io"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/accounts/external"
-	"github.com/ethereum/go-ethereum/accounts/keystore"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/accounts/external"
+	"github.com/tenderly/net-optimism/accounts/keystore"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/log"
 )
 
 // ErrNoChainID is returned whenever the user failed to specify a chain id.
@@ -142,10 +142,10 @@ func NewKeyStoreTransactorWithChainID(keystore *keystore.KeyStore, account accou
 // NewKeyedTransactorWithChainID is a utility method to easily create a transaction signer
 // from a single private key.
 func NewKeyedTransactorWithChainID(key *ecdsa.PrivateKey, chainID *big.Int) (*TransactOpts, error) {
-	keyAddr := crypto.PubkeyToAddress(key.PublicKey)
 	if chainID == nil {
 		return nil, ErrNoChainID
 	}
+	keyAddr := crypto.PubkeyToAddress(key.PublicKey)
 	signer := types.LatestSignerForChainID(chainID)
 	return &TransactOpts{
 		From: keyAddr,

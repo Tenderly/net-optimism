@@ -22,10 +22,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/internal/utesting"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/eth/protocols/eth"
+	"github.com/tenderly/net-optimism/internal/utesting"
 )
 
 // sendTxs sends the given transactions to the node and
@@ -102,7 +102,7 @@ func (s *Suite) sendTxs(t *utesting.T, txs []*types.Transaction) error {
 		}
 	}
 
-	return fmt.Errorf("timed out waiting for txs")
+	return errors.New("timed out waiting for txs")
 }
 
 func (s *Suite) sendInvalidTxs(t *utesting.T, txs []*types.Transaction) error {

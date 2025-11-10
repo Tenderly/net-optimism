@@ -25,10 +25,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/console/prompt"
-	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/console/prompt"
+	"github.com/tenderly/net-optimism/internal/ethapi"
+	"github.com/tenderly/net-optimism/log"
 )
 
 type CommandlineUI struct {
@@ -128,12 +128,18 @@ func (ui *CommandlineUI) ApproveTx(request *SignTxRequest) (SignTxResponse, erro
 		fmt.Printf("chainid:  %v\n", chainId)
 	}
 	if list := request.Transaction.AccessList; list != nil {
-		fmt.Printf("Accesslist\n")
+		fmt.Printf("Accesslist:\n")
 		for i, el := range *list {
 			fmt.Printf(" %d. %v\n", i, el.Address)
 			for j, slot := range el.StorageKeys {
 				fmt.Printf("   %d. %v\n", j, slot)
 			}
+		}
+	}
+	if len(request.Transaction.BlobHashes) > 0 {
+		fmt.Printf("Blob hashes:\n")
+		for _, bh := range request.Transaction.BlobHashes {
+			fmt.Printf("   %v\n", bh)
 		}
 	}
 	if request.Transaction.Data != nil {

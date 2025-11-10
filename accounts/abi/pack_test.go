@@ -27,14 +27,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/tenderly/net-optimism/common"
 )
 
 // TestPack tests the general pack/unpack tests in packing_test.go
 func TestPack(t *testing.T) {
 	t.Parallel()
 	for i, test := range packUnpackTests {
-		i, test := i, test
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			t.Parallel()
 			encb, err := hex.DecodeString(test.packed)

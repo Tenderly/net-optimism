@@ -17,7 +17,7 @@
 // Package bind generates Ethereum contract Go bindings.
 //
 // Detailed usage document and tutorial available on the go-ethereum Wiki page:
-// https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts
+// https://github.com/tenderly/net-optimism/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts
 package bind
 
 import (
@@ -29,8 +29,8 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/accounts/abi"
+	"github.com/tenderly/net-optimism/log"
 )
 
 // Lang is a target programming language selector to generate bindings for.
@@ -252,7 +252,7 @@ func Bind(types []string, abis []string, bytecodes []string, fsigs []map[string]
 		}
 		// Parse library references.
 		for pattern, name := range libs {
-			matched, err := regexp.Match("__\\$"+pattern+"\\$__", []byte(contracts[types[i]].InputBin))
+			matched, err := regexp.MatchString("__\\$"+pattern+"\\$__", contracts[types[i]].InputBin)
 			if err != nil {
 				log.Error("Could not search for pattern", "pattern", pattern, "contract", contracts[types[i]], "err", err)
 			}

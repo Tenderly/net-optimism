@@ -20,20 +20,19 @@ import (
 	"errors"
 	"time"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/eth/catalyst"
-	"github.com/ethereum/go-ethereum/eth/downloader"
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/eth/filters"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/eth"
+	"github.com/tenderly/net-optimism/eth/catalyst"
+	"github.com/tenderly/net-optimism/eth/ethconfig"
+	"github.com/tenderly/net-optimism/eth/filters"
+	"github.com/tenderly/net-optimism/ethclient"
+	"github.com/tenderly/net-optimism/node"
+	"github.com/tenderly/net-optimism/p2p"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // Client exposes the methods provided by the Ethereum RPC client.
@@ -85,7 +84,7 @@ func NewBackend(alloc types.GenesisAlloc, options ...func(nodeConf *node.Config,
 		GasLimit: ethconfig.Defaults.Miner.GasCeil,
 		Alloc:    alloc,
 	}
-	ethConf.SyncMode = downloader.FullSync
+	ethConf.SyncMode = ethconfig.FullSync
 	ethConf.TxPool.NoLocals = true
 
 	for _, option := range options {
@@ -114,7 +113,7 @@ func NewBackendFromConfig(conf ethconfig.Config) *Backend {
 		panic(err)
 	}
 
-	conf.SyncMode = downloader.FullSync
+	conf.SyncMode = ethconfig.FullSync
 	conf.TxPool.NoLocals = true
 	sim, err := newWithNode(stack, &conf, 0)
 	if err != nil {
@@ -135,7 +134,7 @@ func newWithNode(stack *node.Node, conf *eth.Config, blockPeriod uint64) (*Backe
 	filterSystem := filters.NewFilterSystem(backend.APIBackend, filters.Config{})
 	stack.RegisterAPIs([]rpc.API{{
 		Namespace: "eth",
-		Service:   filters.NewFilterAPI(filterSystem, false),
+		Service:   filters.NewFilterAPI(filterSystem),
 	}})
 	// Start the node
 	if err := stack.Start(); err != nil {

@@ -22,12 +22,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/rpc"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -98,7 +98,7 @@ func TestAuthEndpoints(t *testing.T) {
 		t.Fatalf("failed to create jwt secret: %v", err)
 	}
 	// Geth must read it from a file, and does not support in-memory JWT secrets, so we create a temporary file.
-	jwtPath := path.Join(t.TempDir(), "jwt_secret")
+	jwtPath := filepath.Join(t.TempDir(), "jwt_secret")
 	if err := os.WriteFile(jwtPath, []byte(hexutil.Encode(secret[:])), 0600); err != nil {
 		t.Fatalf("failed to prepare jwt secret file: %v", err)
 	}

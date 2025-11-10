@@ -22,12 +22,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/metrics/internal"
+	"github.com/tenderly/net-optimism/metrics"
+	"github.com/tenderly/net-optimism/metrics/internal"
 )
 
 func TestMain(m *testing.M) {
-	metrics.Enabled = true
+	metrics.Enable()
 	os.Exit(m.Run())
 }
 

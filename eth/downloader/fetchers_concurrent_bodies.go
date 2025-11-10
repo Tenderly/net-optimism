@@ -19,9 +19,9 @@ package downloader
 import (
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/eth/protocols/eth"
+	"github.com/tenderly/net-optimism/log"
 )
 
 // bodyQueue implements typedQueue and is a type adapter between the generic
@@ -78,7 +78,6 @@ func (q *bodyQueue) request(peer *peerConnection, req *fetchRequest, resCh chan 
 	if q.bodyFetchHook != nil {
 		q.bodyFetchHook(req.Headers)
 	}
-
 	hashes := make([]common.Hash, 0, len(req.Headers))
 	for _, header := range req.Headers {
 		hashes = append(hashes, header.Hash())

@@ -25,9 +25,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
 )
 
 // Runs multiple tests with randomized parameters.
@@ -228,7 +228,7 @@ func (b *testChainIndexBackend) Process(ctx context.Context, header *types.Heade
 		b.t.Error("Unexpected call to Process")
 		// Can't use Fatal since this is not the test's goroutine.
 		// Returning error stops the chainIndexer's updateLoop
-		return errors.New("Unexpected call to Process")
+		return errors.New("unexpected call to Process")
 	case b.processCh <- header.Number.Uint64():
 	}
 	return nil

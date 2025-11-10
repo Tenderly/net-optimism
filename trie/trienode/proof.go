@@ -20,10 +20,10 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 // ProofSet stores a set of trie nodes. It implements trie.Database and can also
@@ -69,6 +69,10 @@ func (db *ProofSet) Delete(key []byte) error {
 	return nil
 }
 
+func (db *ProofSet) DeleteRange(start, end []byte) error {
+	panic("not supported")
+}
+
 // Get returns a stored node
 func (db *ProofSet) Get(key []byte) ([]byte, error) {
 	db.lock.RLock()
@@ -102,14 +106,14 @@ func (db *ProofSet) DataSize() int {
 	return db.dataSize
 }
 
-// List converts the node set to a ProofList
-func (db *ProofSet) List() ProofList {
+// List converts the node set to a slice of bytes.
+func (db *ProofSet) List() [][]byte {
 	db.lock.RLock()
 	defer db.lock.RUnlock()
 
-	var values ProofList
-	for _, key := range db.order {
-		values = append(values, db.nodes[key])
+	values := make([][]byte, len(db.order))
+	for i, key := range db.order {
+		values[i] = db.nodes[key]
 	}
 	return values
 }

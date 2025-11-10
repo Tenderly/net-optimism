@@ -23,11 +23,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/trie/trienode"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/trie/trienode"
 )
 
 func newEmptySecure() *StateTrie {
@@ -60,7 +60,7 @@ func makeTestStateTrie() (*testDb, *StateTrie, map[string][]byte) {
 			trie.MustUpdate(key, val)
 		}
 	}
-	root, nodes, _ := trie.Commit(false)
+	root, nodes := trie.Commit(false)
 	if err := triedb.Update(root, types.EmptyRootHash, trienode.NewWithNodeSet(nodes)); err != nil {
 		panic(fmt.Errorf("failed to commit db %v", err))
 	}

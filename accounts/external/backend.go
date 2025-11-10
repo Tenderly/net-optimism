@@ -22,15 +22,15 @@ import (
 	"math/big"
 	"sync"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/event"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rpc"
+	"github.com/tenderly/net-optimism/signer/core/apitypes"
 )
 
 type ExternalBackend struct {
@@ -205,7 +205,7 @@ func (api *ExternalSigner) SignTx(account accounts.Account, tx *types.Transactio
 		to = &t
 	}
 	args := &apitypes.SendTxArgs{
-		Data:  &data,
+		Input: &data,
 		Nonce: hexutil.Uint64(tx.Nonce()),
 		Value: hexutil.Big(*tx.Value()),
 		Gas:   hexutil.Uint64(tx.Gas()),
@@ -215,7 +215,7 @@ func (api *ExternalSigner) SignTx(account accounts.Account, tx *types.Transactio
 	switch tx.Type() {
 	case types.LegacyTxType, types.AccessListTxType:
 		args.GasPrice = (*hexutil.Big)(tx.GasPrice())
-	case types.DynamicFeeTxType:
+	case types.DynamicFeeTxType, types.BlobTxType, types.SetCodeTxType:
 		args.MaxFeePerGas = (*hexutil.Big)(tx.GasFeeCap())
 		args.MaxPriorityFeePerGas = (*hexutil.Big)(tx.GasTipCap())
 	default:
@@ -235,6 +235,17 @@ func (api *ExternalSigner) SignTx(account accounts.Account, tx *types.Transactio
 		accessList := tx.AccessList()
 		args.AccessList = &accessList
 	}
+	if tx.Type() == types.BlobTxType {
+		args.BlobHashes = tx.BlobHashes()
+		sidecar := tx.BlobTxSidecar()
+		if sidecar == nil {
+			return nil, errors.New("blobs must be present for signing")
+		}
+		args.Blobs = sidecar.Blobs
+		args.Commitments = sidecar.Commitments
+		args.Proofs = sidecar.Proofs
+	}
+
 	var res signTransactionResult
 	if err := api.client.Call(&res, "account_signTransaction", args); err != nil {
 		return nil, err

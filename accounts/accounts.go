@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/event"
+	"github.com/tenderly/net-optimism"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/event"
 	"golang.org/x/crypto/sha3"
 )
 
@@ -195,7 +195,7 @@ func TextHash(data []byte) []byte {
 //
 // This gives context to the signed message and prevents signing of transactions.
 func TextAndHash(data []byte) ([]byte, string) {
-	msg := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(data), string(data))
+	msg := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(data), data)
 	hasher := sha3.NewLegacyKeccak256()
 	hasher.Write([]byte(msg))
 	return hasher.Sum(nil), msg
@@ -214,7 +214,9 @@ const (
 	// of starting any background processes such as automatic key derivation.
 	WalletOpened
 
-	// WalletDropped
+	// WalletDropped is fired when a wallet is removed or disconnected, either via USB
+	// or due to a filesystem event in the keystore. This event indicates that the wallet
+	// is no longer available for operations.
 	WalletDropped
 )
 

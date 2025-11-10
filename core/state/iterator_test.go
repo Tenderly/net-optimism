@@ -19,9 +19,9 @@ package state
 import (
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/crypto"
 )
 
 // Tests that the node iterator indeed walks over the entire database contents.
@@ -35,7 +35,7 @@ func testNodeIteratorCoverage(t *testing.T, scheme string) {
 	db, sdb, ndb, root, _ := makeTestState(scheme)
 	ndb.Commit(root, false)
 
-	state, err := New(root, sdb, nil)
+	state, err := New(root, sdb)
 	if err != nil {
 		t.Fatalf("failed to create state trie at %x: %v", root, err)
 	}

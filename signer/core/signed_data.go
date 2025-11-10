@@ -23,14 +23,14 @@ import (
 	"fmt"
 	"mime"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/consensus/clique"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/consensus/clique"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/signer/core/apitypes"
 )
 
 // sign receives a request and produces a signature
@@ -260,7 +260,7 @@ func fromHex(data any) ([]byte, error) {
 	return nil, fmt.Errorf("wrong type %T", data)
 }
 
-// typeDataRequest tries to convert the data into a SignDataRequest.
+// typedDataRequest tries to convert the data into a SignDataRequest.
 func typedDataRequest(data any) (*SignDataRequest, error) {
 	var typedData apitypes.TypedData
 	if td, ok := data.(apitypes.TypedData); ok {
@@ -294,7 +294,7 @@ func typedDataRequest(data any) (*SignDataRequest, error) {
 func (api *SignerAPI) EcRecover(ctx context.Context, data hexutil.Bytes, sig hexutil.Bytes) (common.Address, error) {
 	// Returns the address for the Account that was used to create the signature.
 	//
-	// Note, this function is compatible with eth_sign and personal_sign. As such it recovers
+	// Note, this function is compatible with eth_sign. As such it recovers
 	// the address of:
 	// hash = keccak256("\x19Ethereum Signed Message:\n${message length}${message}")
 	// addr = ecrecover(hash, signature)

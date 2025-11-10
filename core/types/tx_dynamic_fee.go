@@ -20,8 +20,8 @@ import (
 	"bytes"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 // DynamicFeeTx represents an EIP-1559 transaction.
@@ -37,9 +37,9 @@ type DynamicFeeTx struct {
 	AccessList AccessList
 
 	// Signature values
-	V *big.Int `json:"v" gencodec:"required"`
-	R *big.Int `json:"r" gencodec:"required"`
-	S *big.Int `json:"s" gencodec:"required"`
+	V *big.Int
+	R *big.Int
+	S *big.Int
 }
 
 // copy creates a deep copy of the transaction data and initializes all fields.

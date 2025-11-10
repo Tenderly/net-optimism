@@ -22,9 +22,9 @@
 package remotedb
 
 import (
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // Database is a key-value lookup for a remote database via debug_dbGet.
@@ -94,6 +94,10 @@ func (db *Database) Delete(key []byte) error {
 	panic("not supported")
 }
 
+func (db *Database) DeleteRange(start, end []byte) error {
+	panic("not supported")
+}
+
 func (db *Database) ModifyAncients(f func(ethdb.AncientWriteOp) error) (int64, error) {
 	panic("not supported")
 }
@@ -110,10 +114,6 @@ func (db *Database) Sync() error {
 	return nil
 }
 
-func (db *Database) MigrateTable(s string, f func([]byte) ([]byte, error)) error {
-	panic("not supported")
-}
-
 func (db *Database) NewBatch() ethdb.Batch {
 	panic("not supported")
 }
@@ -126,8 +126,8 @@ func (db *Database) NewIterator(prefix []byte, start []byte) ethdb.Iterator {
 	panic("not supported")
 }
 
-func (db *Database) Stat(property string) (string, error) {
-	panic("not supported")
+func (db *Database) Stat() (string, error) {
+	return "", nil
 }
 
 func (db *Database) AncientDatadir() (string, error) {
@@ -136,10 +136,6 @@ func (db *Database) AncientDatadir() (string, error) {
 
 func (db *Database) Compact(start []byte, limit []byte) error {
 	return nil
-}
-
-func (db *Database) NewSnapshot() (ethdb.Snapshot, error) {
-	panic("not supported")
 }
 
 func (db *Database) Close() error {

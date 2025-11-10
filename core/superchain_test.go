@@ -1,25 +1,29 @@
 package core
 
 import (
+	"fmt"
 	"testing"
 
-	"github.com/ethereum-optimism/superchain-registry/superchain"
-
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/triedb"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/superchain"
+	"github.com/tenderly/net-optimism/triedb"
 )
 
 func TestOPStackGenesis(t *testing.T) {
-	for id := range superchain.OPChains {
-		_, err := LoadOPStackGenesis(id)
-		if err != nil {
-			t.Error(err)
-		}
+	for id, cfg := range superchain.Chains {
+		t.Run(fmt.Sprintf("chain-%s", cfg.Name), func(t *testing.T) {
+			t.Parallel()
+			_, err := LoadOPStackGenesis(id)
+			if err != nil {
+				t.Error(err)
+			}
+		})
 	}
 }
 
 func TestRegistryChainConfigOverride(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		name                 string
 		overrides            *ChainOverrides
 		setDenominator       *uint64
@@ -57,7 +61,6 @@ func TestRegistryChainConfigOverride(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			db := rawdb.NewMemoryDatabase()
@@ -77,9 +80,12 @@ func TestRegistryChainConfigOverride(t *testing.T) {
 			rawdb.WriteCanonicalHash(db, bl.Hash(), 0)
 			rawdb.WriteBlock(db, bl)
 
+			if genesis.Config.Optimism == nil {
+				t.Fatal("expected non nil Optimism config")
+			}
 			genesis.Config.Optimism.EIP1559DenominatorCanyon = tt.setDenominator
 			// create chain config, even with incomplete genesis input: the chain config should be corrected
-			chainConfig, _, err := SetupGenesisBlockWithOverride(db, tdb, genesis, tt.overrides)
+			chainConfig, _, _, err := SetupGenesisBlockWithOverride(db, tdb, genesis, tt.overrides)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -97,5 +103,25 @@ func TestRegistryChainConfigOverride(t *testing.T) {
 				t.Fatalf("expected EIP1559DenominatorCanyon to be %d, but got %d", tt.expectedDenominator, *chainConfig.Optimism.EIP1559DenominatorCanyon)
 			}
 		})
+	}
+}
+
+func TestOPMainnetGenesisDB(t *testing.T) {
+	db := rawdb.NewMemoryDatabase()
+	genesis, err := LoadOPStackGenesis(10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tdb := triedb.NewDatabase(db, newDbConfig(rawdb.PathScheme))
+	genesis.MustCommit(db, tdb)
+	bl := genesis.ToBlock()
+	expected := common.HexToHash("0x7ca38a1916c42007829c55e69d3e9a73265554b586a499015373241b8a3fa48b")
+	if blockHash := bl.Hash(); blockHash != expected {
+		t.Fatalf("block hash mismatch: %s <> %s", blockHash, expected)
+	}
+	// This is written separately to the DB by Commit() and is thus tested explicitly here
+	canonicalHash := rawdb.ReadCanonicalHash(db, 0)
+	if canonicalHash != expected {
+		t.Fatalf("canonical hash mismatch: %s <> %s", canonicalHash, expected)
 	}
 }

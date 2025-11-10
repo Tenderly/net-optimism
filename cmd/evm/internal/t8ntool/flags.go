@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/tests"
+	"github.com/tenderly/net-optimism/core/vm"
+	"github.com/tenderly/net-optimism/tests"
 	"github.com/urfave/cli/v2"
 )
 
@@ -49,6 +49,10 @@ var (
 	TraceEnableReturnDataFlag = &cli.BoolFlag{
 		Name:  "trace.returndata",
 		Usage: "Enable return data output in traces",
+	}
+	TraceEnableCallFramesFlag = &cli.BoolFlag{
+		Name:  "trace.callframes",
+		Usage: "Enable call frames output in traces",
 	}
 	OutputBasedir = &cli.StringFlag{
 		Name:  "output.basedir",

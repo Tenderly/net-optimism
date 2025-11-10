@@ -20,26 +20,26 @@ import (
 	crand "crypto/rand"
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/eth/catalyst"
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/internal/utesting"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/eth"
+	"github.com/tenderly/net-optimism/eth/catalyst"
+	"github.com/tenderly/net-optimism/eth/ethconfig"
+	"github.com/tenderly/net-optimism/internal/utesting"
+	"github.com/tenderly/net-optimism/node"
+	"github.com/tenderly/net-optimism/p2p"
 )
 
-func makeJWTSecret() (string, [32]byte, error) {
+func makeJWTSecret(t *testing.T) (string, [32]byte, error) {
 	var secret [32]byte
 	if _, err := crand.Read(secret[:]); err != nil {
 		return "", secret, fmt.Errorf("failed to create jwt secret: %v", err)
 	}
-	jwtPath := path.Join(os.TempDir(), "jwt_secret")
+	jwtPath := filepath.Join(t.TempDir(), "jwt_secret")
 	if err := os.WriteFile(jwtPath, []byte(hexutil.Encode(secret[:])), 0600); err != nil {
 		return "", secret, fmt.Errorf("failed to prepare jwt secret file: %v", err)
 	}
@@ -47,7 +47,7 @@ func makeJWTSecret() (string, [32]byte, error) {
 }
 
 func TestEthSuite(t *testing.T) {
-	jwtPath, secret, err := makeJWTSecret()
+	jwtPath, secret, err := makeJWTSecret(t)
 	if err != nil {
 		t.Fatalf("could not make jwt secret: %v", err)
 	}
@@ -75,7 +75,7 @@ func TestEthSuite(t *testing.T) {
 }
 
 func TestSnapSuite(t *testing.T) {
-	jwtPath, secret, err := makeJWTSecret()
+	jwtPath, secret, err := makeJWTSecret(t)
 	if err != nil {
 		t.Fatalf("could not make jwt secret: %v", err)
 	}

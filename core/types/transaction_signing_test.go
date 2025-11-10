@@ -22,10 +22,10 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 func TestEIP155Signing(t *testing.T) {

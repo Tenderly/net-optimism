@@ -25,12 +25,12 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/eth/protocols/snap"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/rlpx"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/eth/protocols/eth"
+	"github.com/tenderly/net-optimism/eth/protocols/snap"
+	"github.com/tenderly/net-optimism/p2p"
+	"github.com/tenderly/net-optimism/p2p/rlpx"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 var (
@@ -53,7 +53,8 @@ func (s *Suite) dial() (*Conn, error) {
 // dialAs attempts to dial a given node and perform a handshake using the given
 // private key.
 func (s *Suite) dialAs(key *ecdsa.PrivateKey) (*Conn, error) {
-	fd, err := net.Dial("tcp", fmt.Sprintf("%v:%d", s.Dest.IP(), s.Dest.TCP()))
+	tcpEndpoint, _ := s.Dest.TCPEndpoint()
+	fd, err := net.Dial("tcp", tcpEndpoint.String())
 	if err != nil {
 		return nil, err
 	}
@@ -314,9 +315,6 @@ loop:
 			if have, want := msg.Head, chain.blocks[chain.Len()-1].Hash(); have != want {
 				return fmt.Errorf("wrong head block in status, want:  %#x (block %d) have %#x",
 					want, chain.blocks[chain.Len()-1].NumberU64(), have)
-			}
-			if have, want := msg.TD.Cmp(chain.TD()), 0; have != want {
-				return fmt.Errorf("wrong TD in status: have %v want %v", have, want)
 			}
 			if have, want := msg.ForkID, chain.ForkID(); !reflect.DeepEqual(have, want) {
 				return fmt.Errorf("wrong fork ID in status: have %v, want %v", have, want)

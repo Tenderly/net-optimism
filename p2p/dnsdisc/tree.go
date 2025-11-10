@@ -21,16 +21,17 @@ import (
 	"crypto/ecdsa"
 	"encoding/base32"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
+	"slices"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/enr"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/p2p/enode"
+	"github.com/tenderly/net-optimism/p2p/enr"
+	"github.com/tenderly/net-optimism/rlp"
 	"golang.org/x/crypto/sha3"
-	"golang.org/x/exp/slices"
 )
 
 // Tree is a merkle tree of node records.
@@ -341,7 +342,7 @@ func parseLinkEntry(e string) (entry, error) {
 
 func parseLink(e string) (*linkEntry, error) {
 	if !strings.HasPrefix(e, linkPrefix) {
-		return nil, fmt.Errorf("wrong/missing scheme 'enrtree' in URL")
+		return nil, errors.New("wrong/missing scheme 'enrtree' in URL")
 	}
 	e = e[len(linkPrefix):]
 

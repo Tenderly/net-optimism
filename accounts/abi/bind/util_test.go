@@ -23,12 +23,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient/simulated"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/tenderly/net-optimism/accounts/abi/bind"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/ethclient/simulated"
+	"github.com/tenderly/net-optimism/params"
 )
 
 var testKey, _ = crypto.HexToECDSA("b71c71a67e1177ad4e901695e1b4b9ee17ae16c6668d313eac2f96dbcda3f291")
@@ -82,7 +82,9 @@ func TestWaitDeployed(t *testing.T) {
 		}()
 
 		// Send and mine the transaction.
-		backend.Client().SendTransaction(ctx, tx)
+		if err := backend.Client().SendTransaction(ctx, tx); err != nil {
+			t.Errorf("test %q: failed to send transaction: %v", name, err)
+		}
 		backend.Commit()
 
 		select {
@@ -116,7 +118,9 @@ func TestWaitDeployedCornerCases(t *testing.T) {
 	tx, _ = types.SignTx(tx, types.LatestSigner(params.AllDevChainProtocolChanges), testKey)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	backend.Client().SendTransaction(ctx, tx)
+	if err := backend.Client().SendTransaction(ctx, tx); err != nil {
+		t.Errorf("failed to send transaction: %q", err)
+	}
 	backend.Commit()
 	notContractCreation := errors.New("tx is not contract creation")
 	if _, err := bind.WaitDeployed(ctx, backend.Client(), tx); err.Error() != notContractCreation.Error() {
@@ -134,6 +138,8 @@ func TestWaitDeployedCornerCases(t *testing.T) {
 		}
 	}()
 
-	backend.Client().SendTransaction(ctx, tx)
+	if err := backend.Client().SendTransaction(ctx, tx); err != nil {
+		t.Errorf("failed to send transaction: %q", err)
+	}
 	cancel()
 }

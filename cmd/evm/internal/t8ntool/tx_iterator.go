@@ -25,12 +25,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 // txWithKey is a helper-struct, to allow us to use the types.Transaction along with
@@ -112,7 +112,7 @@ func signUnsignedTransactions(txs []*txWithKey, signer types.Signer) (types.Tran
 	return signedTxs, nil
 }
 
-func loadTransactions(txStr string, inputData *input, env stEnv, chainConfig *params.ChainConfig) (txIterator, error) {
+func loadTransactions(txStr string, inputData *input, chainConfig *params.ChainConfig) (txIterator, error) {
 	var txsWithKeys []*txWithKey
 	if txStr != stdinSelector {
 		data, err := os.ReadFile(txStr)
@@ -127,7 +127,7 @@ func loadTransactions(txStr string, inputData *input, env stEnv, chainConfig *pa
 			return newRlpTxIterator(body), nil
 		}
 		if err := json.Unmarshal(data, &txsWithKeys); err != nil {
-			return nil, NewError(ErrorJson, fmt.Errorf("failed unmarshaling txs-file: %v", err))
+			return nil, NewError(ErrorJson, fmt.Errorf("failed unmarshalling txs-file: %v", err))
 		}
 	} else {
 		if len(inputData.TxRlp) > 0 {

@@ -35,25 +35,25 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/accounts/keystore"
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/internal/flags"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/ethereum/go-ethereum/signer/core"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
-	"github.com/ethereum/go-ethereum/signer/fourbyte"
-	"github.com/ethereum/go-ethereum/signer/rules"
-	"github.com/ethereum/go-ethereum/signer/storage"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/accounts/keystore"
+	"github.com/tenderly/net-optimism/cmd/utils"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/internal/ethapi"
+	"github.com/tenderly/net-optimism/internal/flags"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/node"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/rpc"
+	"github.com/tenderly/net-optimism/signer/core"
+	"github.com/tenderly/net-optimism/signer/core/apitypes"
+	"github.com/tenderly/net-optimism/signer/fourbyte"
+	"github.com/tenderly/net-optimism/signer/rules"
+	"github.com/tenderly/net-optimism/signer/storage"
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 	"github.com/urfave/cli/v2"
@@ -100,7 +100,7 @@ var (
 	chainIdFlag = &cli.Int64Flag{
 		Name:  "chainid",
 		Value: params.MainnetChainConfig.ChainID.Int64(),
-		Usage: "Chain id to use for signing (1=mainnet, 5=Goerli)",
+		Usage: "Chain id to use for signing (1=mainnet, 17000=Holesky)",
 	}
 	rpcPortFlag = &cli.IntFlag{
 		Name:     "http.port",
@@ -552,7 +552,7 @@ func listWallets(c *cli.Context) error {
 // accountImport imports a raw hexadecimal private key via CLI.
 func accountImport(c *cli.Context) error {
 	if c.Args().Len() != 1 {
-		return errors.New("<keyfile> must be given as first argument.")
+		return errors.New("<keyfile> must be given as first argument")
 	}
 	internalApi, ui, err := initInternalApi(c)
 	if err != nil {
@@ -873,7 +873,7 @@ func checkFile(filename string) error {
 	}
 	// Check the unix permission bits
 	// However, on windows, we cannot use the unix perm-bits, see
-	// https://github.com/ethereum/go-ethereum/issues/20123
+	// https://github.com/tenderly/net-optimism/issues/20123
 	if runtime.GOOS != "windows" && info.Mode().Perm()&0377 != 0 {
 		return fmt.Errorf("file (%v) has insecure file permissions (%v)", filename, info.Mode().String())
 	}

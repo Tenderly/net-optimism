@@ -1,4 +1,4 @@
-// Copyright 2023 The go-ethereum Authors
+// Copyright 2019 The go-ethereum Authors
 // This file is part of the go-ethereum library.
 //
 // The go-ethereum library is free software: you can redistribute it and/or modify
@@ -21,8 +21,8 @@ import (
 
 	"github.com/cockroachdb/pebble"
 	"github.com/cockroachdb/pebble/vfs"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/ethdb/dbtest"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/ethdb/dbtest"
 )
 
 func TestPebbleDB(t *testing.T) {

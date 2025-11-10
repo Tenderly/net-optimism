@@ -21,12 +21,12 @@ import (
 	"sync"
 
 	"github.com/VictoriaMetrics/fastcache"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/triedb"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/triedb"
 )
 
 // diskLayer is a low level persistent snapshot built on top of a key-value store.
@@ -72,6 +72,14 @@ func (dl *diskLayer) Stale() bool {
 	defer dl.lock.RUnlock()
 
 	return dl.stale
+}
+
+// markStale sets the stale flag as true.
+func (dl *diskLayer) markStale() {
+	dl.lock.Lock()
+	defer dl.lock.Unlock()
+
+	dl.stale = true
 }
 
 // Account directly retrieves the account associated with a particular hash in
@@ -172,6 +180,21 @@ func (dl *diskLayer) Storage(accountHash, storageHash common.Hash) ([]byte, erro
 // Update creates a new layer on top of the existing snapshot diff tree with
 // the specified data items. Note, the maps are retained by the method to avoid
 // copying everything.
-func (dl *diskLayer) Update(blockHash common.Hash, destructs map[common.Hash]struct{}, accounts map[common.Hash][]byte, storage map[common.Hash]map[common.Hash][]byte) *diffLayer {
-	return newDiffLayer(dl, blockHash, destructs, accounts, storage)
+func (dl *diskLayer) Update(blockHash common.Hash, accounts map[common.Hash][]byte, storage map[common.Hash]map[common.Hash][]byte) *diffLayer {
+	return newDiffLayer(dl, blockHash, accounts, storage)
+}
+
+// stopGeneration aborts the state snapshot generation if it is currently running.
+func (dl *diskLayer) stopGeneration() {
+	dl.lock.RLock()
+	generating := dl.genMarker != nil
+	dl.lock.RUnlock()
+	if !generating {
+		return
+	}
+	if dl.genAbort != nil {
+		abort := make(chan *generatorStats)
+		dl.genAbort <- abort
+		<-abort
+	}
 }

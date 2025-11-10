@@ -21,15 +21,14 @@ package downloader
 
 import (
 	"errors"
-	"math/big"
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/msgrate"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/eth/protocols/eth"
+	"github.com/tenderly/net-optimism/event"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/p2p/msgrate"
 )
 
 const (
@@ -57,7 +56,6 @@ type peerConnection struct {
 
 // Peer encapsulates the methods required to synchronise with a remote full peer.
 type Peer interface {
-	Head() (common.Hash, *big.Int)
 	RequestHeadersByHash(common.Hash, int, int, bool, chan *eth.Response) (*eth.Request, error)
 	RequestHeadersByNumber(uint64, int, int, bool, chan *eth.Response) (*eth.Request, error)
 

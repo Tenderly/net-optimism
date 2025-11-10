@@ -28,7 +28,7 @@ import (
 	"time"
 
 	mapset "github.com/deckarep/golang-set/v2"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/log"
 	"github.com/gorilla/websocket"
 )
 
@@ -120,6 +120,10 @@ func (e wsHandshakeError) Error() string {
 		s += " (HTTP status " + e.status + ")"
 	}
 	return s
+}
+
+func (e wsHandshakeError) Unwrap() error {
+	return e.err
 }
 
 func originIsAllowed(allowedOrigins mapset.Set[string], browserOrigin string) bool {

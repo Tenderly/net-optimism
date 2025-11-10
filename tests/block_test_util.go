@@ -22,26 +22,28 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	stdmath "math"
 	"math/big"
 	"os"
 	"reflect"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/consensus/beacon"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/triedb"
-	"github.com/ethereum/go-ethereum/triedb/hashdb"
-	"github.com/ethereum/go-ethereum/triedb/pathdb"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/consensus/beacon"
+	"github.com/tenderly/net-optimism/consensus/ethash"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/state"
+	"github.com/tenderly/net-optimism/core/tracing"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/core/vm"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/triedb"
+	"github.com/tenderly/net-optimism/triedb/hashdb"
+	"github.com/tenderly/net-optimism/triedb/pathdb"
 )
 
 // A BlockTest checks handling of entire blocks.
@@ -109,7 +111,7 @@ type btHeaderMarshaling struct {
 	ExcessBlobGas *math.HexOrDecimal64
 }
 
-func (t *BlockTest) Run(snapshotter bool, scheme string, tracer vm.EVMLogger, postCheck func(error, *core.BlockChain)) (result error) {
+func (t *BlockTest) Run(snapshotter bool, scheme string, witness bool, tracer *tracing.Hooks, postCheck func(error, *core.BlockChain)) (result error) {
 	config, ok := Forks[t.json.Network]
 	if !ok {
 		return UnsupportedForkError{t.json.Network}
@@ -128,6 +130,11 @@ func (t *BlockTest) Run(snapshotter bool, scheme string, tracer vm.EVMLogger, po
 	}
 	// Commit genesis state
 	gspec := t.genesis(config)
+
+	// if ttd is not specified, set an arbitrary huge value
+	if gspec.Config.TerminalTotalDifficulty == nil {
+		gspec.Config.TerminalTotalDifficulty = big.NewInt(stdmath.MaxInt64)
+	}
 	triedb := triedb.NewDatabase(db, tconf)
 	gblock, err := gspec.Commit(db, triedb)
 	if err != nil {
@@ -150,8 +157,9 @@ func (t *BlockTest) Run(snapshotter bool, scheme string, tracer vm.EVMLogger, po
 		cache.SnapshotWait = true
 	}
 	chain, err := core.NewBlockChain(db, cache, gspec, nil, engine, vm.Config{
-		Tracer: tracer,
-	}, nil, nil)
+		Tracer:                  tracer,
+		StatelessSelfValidation: witness,
+	}, nil)
 	if err != nil {
 		return err
 	}

@@ -28,9 +28,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/enr"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/p2p/enode"
+	"github.com/tenderly/net-optimism/p2p/enr"
+	"github.com/tenderly/net-optimism/rlp"
 	"github.com/urfave/cli/v2"
 )
 
@@ -183,8 +183,8 @@ var attrFormatters = map[string]func(rlp.RawValue) (string, bool){
 }
 
 func formatAttrRaw(v rlp.RawValue) (string, bool) {
-	s := hex.EncodeToString(v)
-	return s, true
+	content, _, err := rlp.SplitString(v)
+	return hex.EncodeToString(content), err == nil
 }
 
 func formatAttrString(v rlp.RawValue) (string, bool) {

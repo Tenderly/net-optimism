@@ -24,13 +24,13 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/consensus/clique"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/common/math"
+	"github.com/tenderly/net-optimism/consensus/clique"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/rlp"
 	"github.com/urfave/cli/v2"
 )
 
@@ -160,7 +160,7 @@ func (i *bbInput) ToBlock() *types.Block {
 	if i.Header.Difficulty != nil {
 		header.Difficulty = i.Header.Difficulty
 	}
-	return types.NewBlockWithHeader(header).WithBody(i.Txs, i.Ommers).WithWithdrawals(i.Withdrawals)
+	return types.NewBlockWithHeader(header).WithBody(types.Body{Transactions: i.Txs, Uncles: i.Ommers, Withdrawals: i.Withdrawals})
 }
 
 // SealBlock seals the given block using the configured engine.
@@ -242,7 +242,7 @@ func readInput(ctx *cli.Context) (*bbInput, error) {
 	if headerStr == stdinSelector || ommersStr == stdinSelector || txsStr == stdinSelector || cliqueStr == stdinSelector {
 		decoder := json.NewDecoder(os.Stdin)
 		if err := decoder.Decode(inputData); err != nil {
-			return nil, NewError(ErrorJson, fmt.Errorf("failed unmarshaling stdin: %v", err))
+			return nil, NewError(ErrorJson, fmt.Errorf("failed unmarshalling stdin: %v", err))
 		}
 	}
 	if cliqueStr != stdinSelector && cliqueStr != "" {

@@ -20,36 +20,37 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/trie/testutil"
-	"github.com/ethereum/go-ethereum/trie/trienode"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/internal/testrand"
+	"github.com/tenderly/net-optimism/trie/trienode"
 )
 
 func emptyLayer() *diskLayer {
 	return &diskLayer{
-		db:     New(rawdb.NewMemoryDatabase(), nil),
-		buffer: newNodeBuffer(DefaultBufferSize, nil, 0),
+		db:     New(rawdb.NewMemoryDatabase(), nil, false),
+		buffer: newBuffer(defaultBufferSize, nil, nil, 0),
 	}
 }
 
 // goos: darwin
 // goarch: arm64
-// pkg: github.com/ethereum/go-ethereum/trie
+// pkg: github.com/tenderly/net-optimism/trie
 // BenchmarkSearch128Layers
 // BenchmarkSearch128Layers-8   	  243826	      4755 ns/op
 func BenchmarkSearch128Layers(b *testing.B) { benchmarkSearch(b, 0, 128) }
 
 // goos: darwin
 // goarch: arm64
-// pkg: github.com/ethereum/go-ethereum/trie
+// pkg: github.com/tenderly/net-optimism/trie
 // BenchmarkSearch512Layers
 // BenchmarkSearch512Layers-8   	   49686	     24256 ns/op
 func BenchmarkSearch512Layers(b *testing.B) { benchmarkSearch(b, 0, 512) }
 
 // goos: darwin
 // goarch: arm64
-// pkg: github.com/ethereum/go-ethereum/trie
+// pkg: github.com/tenderly/net-optimism/trie
 // BenchmarkSearch1Layer
 // BenchmarkSearch1Layer-8   	14062725	        88.40 ns/op
 func BenchmarkSearch1Layer(b *testing.B) { benchmarkSearch(b, 127, 128) }
@@ -57,7 +58,6 @@ func BenchmarkSearch1Layer(b *testing.B) { benchmarkSearch(b, 127, 128) }
 func benchmarkSearch(b *testing.B, depth int, total int) {
 	var (
 		npath []byte
-		nhash common.Hash
 		nblob []byte
 	)
 	// First, we set up 128 diff layers, with 3K items each
@@ -66,17 +66,17 @@ func benchmarkSearch(b *testing.B, depth int, total int) {
 		nodes[common.Hash{}] = make(map[string]*trienode.Node)
 		for i := 0; i < 3000; i++ {
 			var (
-				path = testutil.RandBytes(32)
-				node = testutil.RandomNode()
+				path = testrand.Bytes(32)
+				blob = testrand.Bytes(100)
+				node = trienode.New(crypto.Keccak256Hash(blob), blob)
 			)
-			nodes[common.Hash{}][string(path)] = trienode.New(node.Hash, node.Blob)
+			nodes[common.Hash{}][string(path)] = node
 			if npath == nil && depth == index {
 				npath = common.CopyBytes(path)
-				nblob = common.CopyBytes(node.Blob)
-				nhash = node.Hash
+				nblob = common.CopyBytes(blob)
 			}
 		}
-		return newDiffLayer(parent, common.Hash{}, 0, 0, nodes, nil)
+		return newDiffLayer(parent, common.Hash{}, 0, 0, newNodeSet(nodes), NewStateSetWithOrigin(nil, nil, nil, nil, false))
 	}
 	var layer layer
 	layer = emptyLayer()
@@ -90,7 +90,7 @@ func benchmarkSearch(b *testing.B, depth int, total int) {
 		err  error
 	)
 	for i := 0; i < b.N; i++ {
-		have, err = layer.Node(common.Hash{}, npath, nhash)
+		have, _, _, err = layer.node(common.Hash{}, npath, 0)
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -102,7 +102,7 @@ func benchmarkSearch(b *testing.B, depth int, total int) {
 
 // goos: darwin
 // goarch: arm64
-// pkg: github.com/ethereum/go-ethereum/trie
+// pkg: github.com/tenderly/net-optimism/trie
 // BenchmarkPersist
 // BenchmarkPersist-8   	      10	 111252975 ns/op
 func BenchmarkPersist(b *testing.B) {
@@ -112,12 +112,13 @@ func BenchmarkPersist(b *testing.B) {
 		nodes[common.Hash{}] = make(map[string]*trienode.Node)
 		for i := 0; i < 3000; i++ {
 			var (
-				path = testutil.RandBytes(32)
-				node = testutil.RandomNode()
+				path = testrand.Bytes(32)
+				blob = testrand.Bytes(100)
+				node = trienode.New(crypto.Keccak256Hash(blob), blob)
 			)
-			nodes[common.Hash{}][string(path)] = trienode.New(node.Hash, node.Blob)
+			nodes[common.Hash{}][string(path)] = node
 		}
-		return newDiffLayer(parent, common.Hash{}, 0, 0, nodes, nil)
+		return newDiffLayer(parent, common.Hash{}, 0, 0, newNodeSet(nodes), NewStateSetWithOrigin(nil, nil, nil, nil, false))
 	}
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
@@ -149,13 +150,13 @@ func BenchmarkJournal(b *testing.B) {
 		nodes[common.Hash{}] = make(map[string]*trienode.Node)
 		for i := 0; i < 3000; i++ {
 			var (
-				path = testutil.RandBytes(32)
-				node = testutil.RandomNode()
+				path = testrand.Bytes(32)
+				blob = testrand.Bytes(100)
+				node = trienode.New(crypto.Keccak256Hash(blob), blob)
 			)
-			nodes[common.Hash{}][string(path)] = trienode.New(node.Hash, node.Blob)
+			nodes[common.Hash{}][string(path)] = node
 		}
-		// TODO(rjl493456442) a non-nil state set is expected.
-		return newDiffLayer(parent, common.Hash{}, 0, 0, nodes, nil)
+		return newDiffLayer(parent, common.Hash{}, 0, 0, newNodeSet(nodes), NewStateSetWithOrigin(nil, nil, nil, nil, false))
 	}
 	var layer layer
 	layer = emptyLayer()

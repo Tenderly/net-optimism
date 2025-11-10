@@ -20,10 +20,10 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/beacon/engine"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/miner"
+	"github.com/tenderly/net-optimism/beacon/engine"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/miner"
 )
 
 // maxTrackedPayloads is the maximum number of prepared payloads the execution
@@ -97,7 +97,6 @@ func (q *payloadQueue) get(id engine.PayloadID, full bool) *engine.ExecutionPayl
 func (q *payloadQueue) waitFull(id engine.PayloadID) error {
 	q.lock.RLock()
 	defer q.lock.RUnlock()
-
 	for _, item := range q.payloads {
 		if item == nil {
 			return errors.New("unknown payload")

@@ -17,12 +17,12 @@
 package trie
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/trie/trienode"
-	"github.com/ethereum/go-ethereum/triedb/database"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/trie/trienode"
+	"github.com/tenderly/net-optimism/triedb/database"
 )
 
 // testReader implements database.Reader interface, providing function to
@@ -73,7 +73,7 @@ func newTestDatabase(diskdb ethdb.Database, scheme string) *testDb {
 	}
 }
 
-func (db *testDb) Reader(stateRoot common.Hash) (database.Reader, error) {
+func (db *testDb) NodeReader(stateRoot common.Hash) (database.NodeReader, error) {
 	nodes, _ := db.dirties(stateRoot, true)
 	return &testReader{db: db.disk, scheme: db.scheme, nodes: nodes}, nil
 }

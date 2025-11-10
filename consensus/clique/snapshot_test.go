@@ -21,16 +21,16 @@ import (
 	"crypto/ecdsa"
 	"fmt"
 	"math/big"
+	"slices"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/params"
-	"golang.org/x/exp/slices"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/core/vm"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/params"
 )
 
 // testerAccountPool is a pool to maintain currently active tester accounts,
@@ -367,7 +367,7 @@ func TestClique(t *testing.T) {
 			failure: errRecentlySigned,
 		}, {
 			// Recent signatures should not reset on checkpoint blocks imported in a new
-			// batch (https://github.com/ethereum/go-ethereum/issues/17593). Whilst this
+			// batch (https://github.com/tenderly/net-optimism/issues/17593). Whilst this
 			// seems overly specific and weird, it was a Rinkeby consensus split.
 			epoch:   3,
 			signers: []string{"A", "B", "C"},
@@ -458,7 +458,7 @@ func (tt *cliqueTest) run(t *testing.T) {
 		batches[len(batches)-1] = append(batches[len(batches)-1], block)
 	}
 	// Pass all the headers through clique and ensure tallying succeeds
-	chain, err := core.NewBlockChain(rawdb.NewMemoryDatabase(), nil, genesis, nil, engine, vm.Config{}, nil, nil)
+	chain, err := core.NewBlockChain(rawdb.NewMemoryDatabase(), nil, genesis, nil, engine, vm.Config{}, nil)
 	if err != nil {
 		t.Fatalf("failed to create test chain: %v", err)
 	}
@@ -467,7 +467,6 @@ func (tt *cliqueTest) run(t *testing.T) {
 	for j := 0; j < len(batches)-1; j++ {
 		if k, err := chain.InsertChain(batches[j]); err != nil {
 			t.Fatalf("failed to import batch %d, block %d: %v", j, k, err)
-			break
 		}
 	}
 	if _, err = chain.InsertChain(batches[len(batches)-1]); err != tt.failure {

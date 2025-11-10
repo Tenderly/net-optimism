@@ -12,7 +12,7 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>
+// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
 package core
 
@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/core/rawdb"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/log"
 )
 
 // TxIndexProgress is the struct describing the progress for transaction indexing.
@@ -151,9 +151,9 @@ func (indexer *txIndexer) loop(chain *BlockChain) {
 			if done == nil {
 				stop = make(chan struct{})
 				done = make(chan struct{})
-				go indexer.run(rawdb.ReadTxIndexTail(indexer.db), head.Block.NumberU64(), stop, done)
+				go indexer.run(rawdb.ReadTxIndexTail(indexer.db), head.Header.Number.Uint64(), stop, done)
 			}
-			lastHead = head.Block.NumberU64()
+			lastHead = head.Header.Number.Uint64()
 		case <-done:
 			stop = nil
 			done = nil

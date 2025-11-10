@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/ethereum/go-ethereum/cmd/devp2p/internal/ethtest"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/rlpx"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/cmd/devp2p/internal/ethtest"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/p2p"
+	"github.com/tenderly/net-optimism/p2p/enode"
+	"github.com/tenderly/net-optimism/p2p/rlpx"
+	"github.com/tenderly/net-optimism/rlp"
 	"github.com/urfave/cli/v2"
 )
 
@@ -77,7 +77,11 @@ var (
 
 func rlpxPing(ctx *cli.Context) error {
 	n := getNodeArg(ctx)
-	fd, err := net.Dial("tcp", fmt.Sprintf("%v:%d", n.IP(), n.TCP()))
+	tcpEndpoint, ok := n.TCPEndpoint()
+	if !ok {
+		return errors.New("node has no TCP endpoint")
+	}
+	fd, err := net.Dial("tcp", tcpEndpoint.String())
 	if err != nil {
 		return err
 	}
@@ -105,7 +109,7 @@ func rlpxPing(ctx *cli.Context) error {
 		}
 		return fmt.Errorf("received disconnect message: %v", msg[0])
 	default:
-		return fmt.Errorf("invalid message code %d, expected handshake (code zero)", code)
+		return fmt.Errorf("invalid message code %d, expected handshake (code zero) or disconnect (code one)", code)
 	}
 	return nil
 }

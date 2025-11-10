@@ -21,13 +21,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/internal/debug"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/common/hexutil"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/internal/debug"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/p2p"
+	"github.com/tenderly/net-optimism/p2p/discover"
+	"github.com/tenderly/net-optimism/p2p/enode"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // apis returns the collection of built-in RPC APIs.
@@ -39,6 +40,9 @@ func (n *Node) apis() []rpc.API {
 		}, {
 			Namespace: "debug",
 			Service:   debug.Handler,
+		}, {
+			Namespace: "debug",
+			Service:   &p2pDebugAPI{n},
 		}, {
 			Namespace: "web3",
 			Service:   &web3API{n},
@@ -144,8 +148,6 @@ func (api *adminAPI) PeerEvents(ctx context.Context) (*rpc.Subscription, error) 
 			case <-sub.Err():
 				return
 			case <-rpcSub.Err():
-				return
-			case <-notifier.Closed():
 				return
 			}
 		}
@@ -334,4 +336,17 @@ func (s *web3API) ClientVersion() string {
 // It assumes the input is hex encoded.
 func (s *web3API) Sha3(input hexutil.Bytes) hexutil.Bytes {
 	return crypto.Keccak256(input)
+}
+
+// p2pDebugAPI provides access to p2p internals for debugging.
+type p2pDebugAPI struct {
+	stack *Node
+}
+
+func (s *p2pDebugAPI) DiscoveryV4Table() [][]discover.BucketNode {
+	disc := s.stack.server.DiscoveryV4()
+	if disc != nil {
+		return disc.TableBuckets()
+	}
+	return nil
 }

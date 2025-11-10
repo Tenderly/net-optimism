@@ -41,10 +41,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/tenderly/net-optimism/accounts"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/event"
+	"github.com/tenderly/net-optimism/log"
 	pcsc "github.com/gballet/go-libpcsclite"
 )
 
@@ -95,6 +95,7 @@ func (hub *Hub) readPairings() error {
 		}
 		return err
 	}
+	defer pairingFile.Close()
 
 	pairingData, err := io.ReadAll(pairingFile)
 	if err != nil {
