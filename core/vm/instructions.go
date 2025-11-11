@@ -882,6 +882,11 @@ func opStop(pc *uint64, evm *EVM, scope *ScopeContext) ([]byte, error) {
 }
 
 func opSelfdestruct(pc *uint64, evm *EVM, scope *ScopeContext) ([]byte, error) {
+	if evm.chainConfig.IsZircuitMonoFee(evm.Context.BlockNumber) &&
+		!evm.chainConfig.IsZircuitTenrec(evm.Context.Time) {
+		return opUndefined(pc, evm, scope)
+	}
+
 	if evm.readOnly {
 		return nil, ErrWriteProtection
 	}
@@ -901,6 +906,11 @@ func opSelfdestruct(pc *uint64, evm *EVM, scope *ScopeContext) ([]byte, error) {
 }
 
 func opSelfdestruct6780(pc *uint64, evm *EVM, scope *ScopeContext) ([]byte, error) {
+	if evm.chainConfig.IsZircuitMonoFee(evm.Context.BlockNumber) &&
+		!evm.chainConfig.IsZircuitTenrec(evm.Context.Time) {
+		return opUndefined(pc, evm, scope)
+	}
+
 	if evm.readOnly {
 		return nil, ErrWriteProtection
 	}
