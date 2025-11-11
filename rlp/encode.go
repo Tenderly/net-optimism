@@ -24,8 +24,8 @@ import (
 	"math/bits"
 	"reflect"
 
-	"github.com/ethereum/go-ethereum/rlp/internal/rlpstruct"
 	"github.com/holiman/uint256"
+	"github.com/tenderly/net-optimism/rlp/internal/rlpstruct"
 )
 
 var (

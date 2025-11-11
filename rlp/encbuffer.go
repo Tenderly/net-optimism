@@ -23,8 +23,8 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/holiman/uint256"
+	"github.com/tenderly/net-optimism/common/math"
 )
 
 type encBuffer struct {

@@ -17,8 +17,8 @@
 package engine
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 // EngineAPIError is a standardized error message between consensus and execution

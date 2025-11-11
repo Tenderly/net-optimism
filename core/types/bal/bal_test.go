@@ -23,10 +23,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/internal/testrand"
-	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/holiman/uint256"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/internal/testrand"
+	"github.com/tenderly/net-optimism/rlp"
 )
 
 func equalBALs(a *BlockAccessList, b *BlockAccessList) bool {

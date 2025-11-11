@@ -2,7 +2,7 @@
 
 package bal
 
-import "github.com/ethereum/go-ethereum/rlp"
+import "github.com/tenderly/net-optimism/rlp"
 import "io"
 
 func (obj *BlockAccessList) EncodeRLP(_w io.Writer) error {

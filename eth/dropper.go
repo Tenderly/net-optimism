@@ -22,11 +22,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/mclock"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/metrics"
+	"github.com/tenderly/net-optimism/p2p"
 )
 
 const (

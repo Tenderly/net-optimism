@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/forkid"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/forkid"
+	"github.com/tenderly/net-optimism/metrics"
+	"github.com/tenderly/net-optimism/p2p"
 )
 
 const (

@@ -22,13 +22,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/tracker"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/core"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/p2p/tracker"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/trie"
 )
 
 // requestTracker is a singleton tracker for eth/66 and newer request times.

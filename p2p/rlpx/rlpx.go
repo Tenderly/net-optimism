@@ -33,10 +33,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/bitutil"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/ecies"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/tenderly/net-optimism/common/bitutil"
+	"github.com/tenderly/net-optimism/crypto"
+	"github.com/tenderly/net-optimism/crypto/ecies"
+	"github.com/tenderly/net-optimism/rlp"
 	"github.com/golang/snappy"
 	"golang.org/x/crypto/sha3"
 )

@@ -20,9 +20,9 @@ import (
 	"math"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/trie/utils"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/params"
+	"github.com/tenderly/net-optimism/trie/utils"
 )
 
 var (

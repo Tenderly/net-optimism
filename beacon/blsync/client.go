@@ -17,18 +17,18 @@
 package blsync
 
 import (
-	"github.com/ethereum/go-ethereum/beacon/light"
-	"github.com/ethereum/go-ethereum/beacon/light/api"
-	"github.com/ethereum/go-ethereum/beacon/light/request"
-	"github.com/ethereum/go-ethereum/beacon/light/sync"
-	"github.com/ethereum/go-ethereum/beacon/params"
-	"github.com/ethereum/go-ethereum/beacon/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/ethdb/memorydb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/tenderly/net-optimism/beacon/light"
+	"github.com/tenderly/net-optimism/beacon/light/api"
+	"github.com/tenderly/net-optimism/beacon/light/request"
+	"github.com/tenderly/net-optimism/beacon/light/sync"
+	"github.com/tenderly/net-optimism/beacon/params"
+	"github.com/tenderly/net-optimism/beacon/types"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/mclock"
+	"github.com/tenderly/net-optimism/ethdb/memorydb"
+	"github.com/tenderly/net-optimism/event"
+	"github.com/tenderly/net-optimism/log"
+	"github.com/tenderly/net-optimism/rpc"
 )
 
 type Client struct {

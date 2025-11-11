@@ -23,9 +23,9 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/eth/protocols/snap"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/tenderly/net-optimism/eth/protocols/eth"
+	"github.com/tenderly/net-optimism/eth/protocols/snap"
+	"github.com/tenderly/net-optimism/p2p"
 )
 
 var (

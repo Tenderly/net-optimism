@@ -19,15 +19,15 @@ package state
 import (
 	"errors"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/lru"
-	"github.com/ethereum/go-ethereum/core/state/snapshot"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie/utils"
-	"github.com/ethereum/go-ethereum/triedb"
-	"github.com/ethereum/go-ethereum/triedb/pathdb"
+	"github.com/tenderly/net-optimism/common"
+	"github.com/tenderly/net-optimism/common/lru"
+	"github.com/tenderly/net-optimism/core/state/snapshot"
+	"github.com/tenderly/net-optimism/core/types"
+	"github.com/tenderly/net-optimism/ethdb"
+	"github.com/tenderly/net-optimism/rlp"
+	"github.com/tenderly/net-optimism/trie/utils"
+	"github.com/tenderly/net-optimism/triedb"
+	"github.com/tenderly/net-optimism/triedb/pathdb"
 )
 
 // historicReader wraps a historical state reader defined in path database,

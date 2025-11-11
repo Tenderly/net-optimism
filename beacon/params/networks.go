@@ -19,7 +19,7 @@ package params
 import (
 	_ "embed"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/tenderly/net-optimism/common"
 )
 
 //go:embed checkpoint_mainnet.hex

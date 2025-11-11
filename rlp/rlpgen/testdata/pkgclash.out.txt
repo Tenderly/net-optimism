@@ -1,10 +1,10 @@
 package test
 
-import "github.com/ethereum/go-ethereum/common"
-import "github.com/ethereum/go-ethereum/eth"
-import "github.com/ethereum/go-ethereum/rlp"
+import "github.com/tenderly/net-optimism/common"
+import "github.com/tenderly/net-optimism/eth"
+import "github.com/tenderly/net-optimism/rlp"
 import "io"
-import eth1 "github.com/ethereum/go-ethereum/eth/protocols/eth"
+import eth1 "github.com/tenderly/net-optimism/eth/protocols/eth"
 
 func (obj *Test) EncodeRLP(_w io.Writer) error {
 	w := rlp.NewEncoderBuffer(_w)
