@@ -25,13 +25,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/karalabe/hid"
 	"github.com/tenderly/net-optimism"
 	"github.com/tenderly/net-optimism/accounts"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/log"
-	"github.com/karalabe/hid"
 )
 
 // Maximum time between wallet health checks to detect USB unplugs.

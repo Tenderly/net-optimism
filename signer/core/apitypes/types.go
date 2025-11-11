@@ -30,6 +30,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/accounts"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/common/hexutil"
@@ -37,7 +38,6 @@ import (
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/crypto/kzg4844"
-	"github.com/holiman/uint256"
 )
 
 var typedDataReferenceTypeRegexp = regexp.MustCompile(`^[A-Za-z](\w*)(\[\d*\])*$`)

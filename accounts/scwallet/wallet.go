@@ -33,14 +33,14 @@ import (
 	"sync"
 	"time"
 
+	pcsc "github.com/gballet/go-libpcsclite"
+	"github.com/status-im/keycard-go/derivationpath"
 	"github.com/tenderly/net-optimism"
 	"github.com/tenderly/net-optimism/accounts"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/log"
-	pcsc "github.com/gballet/go-libpcsclite"
-	"github.com/status-im/keycard-go/derivationpath"
 )
 
 // ErrPairingPasswordNeeded is returned if opening the smart card requires pairing with a pairing

@@ -20,10 +20,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/tenderly/net-optimism/beacon/merkle"
-	"github.com/tenderly/net-optimism/common"
 	zrntcommon "github.com/protolambda/zrnt/eth2/beacon/common"
 	"github.com/protolambda/ztyp/tree"
+	"github.com/tenderly/net-optimism/beacon/merkle"
+	"github.com/tenderly/net-optimism/common"
 
 	// beacon chain forks
 	"github.com/protolambda/zrnt/eth2/beacon/capella"

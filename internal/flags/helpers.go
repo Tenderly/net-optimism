@@ -23,9 +23,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/mattn/go-isatty"
 	"github.com/tenderly/net-optimism/internal/version"
 	"github.com/tenderly/net-optimism/log"
-	"github.com/mattn/go-isatty"
 	"github.com/urfave/cli/v2"
 )
 

@@ -20,8 +20,8 @@
 package metrics
 
 import (
-	"github.com/tenderly/net-optimism/log"
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/tenderly/net-optimism/log"
 )
 
 // ReadCPUStats retrieves the current CPU stats.

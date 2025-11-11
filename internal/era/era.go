@@ -27,11 +27,11 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/golang/snappy"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/internal/era/e2store"
 	"github.com/tenderly/net-optimism/rlp"
-	"github.com/golang/snappy"
 )
 
 var (

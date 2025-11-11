@@ -22,6 +22,7 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/consensus"
 	"github.com/tenderly/net-optimism/consensus/beacon"
@@ -33,7 +34,6 @@ import (
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/params"
 	"github.com/tenderly/net-optimism/trie"
-	"github.com/holiman/uint256"
 	"golang.org/x/crypto/sha3"
 )
 

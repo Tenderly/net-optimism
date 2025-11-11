@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/tenderly/net-optimism/beacon/engine"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/params"
-	"github.com/stretchr/testify/require"
 )
 
 func preCanyon() *params.ChainConfig {

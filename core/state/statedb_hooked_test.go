@@ -21,10 +21,10 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/tracing"
 	"github.com/tenderly/net-optimism/core/types"
-	"github.com/holiman/uint256"
 )
 
 // This method tests that the 'burn' from sending-to-selfdestructed accounts

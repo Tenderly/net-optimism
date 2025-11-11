@@ -21,9 +21,9 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/vm"
-	"github.com/holiman/uint256"
 )
 
 func TestPush(t *testing.T) {

@@ -17,9 +17,9 @@
 package vm
 
 import (
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/tracing"
-	"github.com/holiman/uint256"
 )
 
 // Contract represents an ethereum contract in the state database. It contains

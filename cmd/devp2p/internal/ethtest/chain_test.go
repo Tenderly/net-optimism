@@ -21,10 +21,10 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/eth/protocols/eth"
 	"github.com/tenderly/net-optimism/p2p"
-	"github.com/stretchr/testify/assert"
 )
 
 // TestEthProtocolNegotiation tests whether the test suite

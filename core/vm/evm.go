@@ -21,6 +21,7 @@ import (
 	"math/big"
 	"sync/atomic"
 
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/state"
 	"github.com/tenderly/net-optimism/core/tracing"
@@ -28,7 +29,6 @@ import (
 	"github.com/tenderly/net-optimism/crypto"
 	"github.com/tenderly/net-optimism/log"
 	"github.com/tenderly/net-optimism/params"
-	"github.com/holiman/uint256"
 )
 
 type (

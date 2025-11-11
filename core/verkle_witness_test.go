@@ -25,6 +25,8 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/ethereum/go-verkle"
+	"github.com/holiman/uint256"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/consensus/beacon"
 	"github.com/tenderly/net-optimism/consensus/ethash"
@@ -37,8 +39,6 @@ import (
 	"github.com/tenderly/net-optimism/params"
 	"github.com/tenderly/net-optimism/trie/utils"
 	"github.com/tenderly/net-optimism/triedb"
-	"github.com/ethereum/go-verkle"
-	"github.com/holiman/uint256"
 )
 
 var (

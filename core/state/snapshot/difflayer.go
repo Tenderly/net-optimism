@@ -27,10 +27,10 @@ import (
 	"sync/atomic"
 	"time"
 
+	bloomfilter "github.com/holiman/bloomfilter/v2"
 	"github.com/tenderly/net-optimism/common"
 	"github.com/tenderly/net-optimism/core/types"
 	"github.com/tenderly/net-optimism/rlp"
-	bloomfilter "github.com/holiman/bloomfilter/v2"
 )
 
 var (
