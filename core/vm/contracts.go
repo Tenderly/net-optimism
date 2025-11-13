@@ -303,6 +303,8 @@ func activePrecompiledContracts(rules params.Rules) PrecompiledContracts {
 	switch {
 	case rules.IsOptimismJovian:
 		return PrecompiledContractsJovian
+	case rules.IsOsaka:
+		return PrecompiledContractsOsaka
 	case rules.IsOptimismIsthmus:
 		return PrecompiledContractsIsthmus
 	case rules.IsOptimismGranite:
@@ -311,8 +313,6 @@ func activePrecompiledContracts(rules params.Rules) PrecompiledContracts {
 		return PrecompiledContractsFjord
 	case rules.IsVerkle:
 		return PrecompiledContractsVerkle
-	case rules.IsOsaka:
-		return PrecompiledContractsOsaka
 	case rules.IsPrague:
 		return PrecompiledContractsPrague
 	case rules.IsCancun:
@@ -338,14 +338,14 @@ func ActivePrecompiles(rules params.Rules) []common.Address {
 	switch {
 	case rules.IsOptimismJovian:
 		return PrecompiledAddressesJovian
+	case rules.IsOsaka:
+		return PrecompiledAddressesOsaka
 	case rules.IsOptimismIsthmus:
 		return PrecompiledAddressesIsthmus
 	case rules.IsOptimismGranite:
 		return PrecompiledAddressesGranite
 	case rules.IsOptimismFjord:
 		return PrecompiledAddressesFjord
-	case rules.IsOsaka:
-		return PrecompiledAddressesOsaka
 	case rules.IsPrague:
 		return PrecompiledAddressesPrague
 	case rules.IsCancun:
