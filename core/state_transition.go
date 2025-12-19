@@ -365,7 +365,12 @@ func (st *stateTransition) preCheck() error {
 				msg.From.Hex(), stNonce)
 		}
 	}
+	isOsaka := st.evm.ChainConfig().IsOsaka(st.evm.Context.BlockNumber, st.evm.Context.Time)
 	if !msg.SkipFromEOACheck {
+		// Verify tx gas limit does not exceed EIP-7825 cap.
+		if isOsaka && msg.GasLimit > params.MaxTxGas {
+			return fmt.Errorf("%w (cap: %d, tx: %d)", ErrGasLimitTooHigh, params.MaxTxGas, msg.GasLimit)
+		}
 		// Make sure the sender is an EOA
 		code := st.state.GetCode(msg.From)
 		_, delegated := types.ParseDelegation(code)
@@ -399,7 +404,6 @@ func (st *stateTransition) preCheck() error {
 		}
 	}
 	// Check the blob version validity
-	isOsaka := st.evm.ChainConfig().IsOsaka(st.evm.Context.BlockNumber, st.evm.Context.Time)
 	if msg.BlobHashes != nil {
 		// The to field of a blob tx type is mandatory, and a `BlobTx` transaction internally
 		// has it as a non-nillable value, so any msg derived from blob transaction has it non-nil.
@@ -442,10 +446,6 @@ func (st *stateTransition) preCheck() error {
 		if len(msg.SetCodeAuthorizations) == 0 {
 			return fmt.Errorf("%w (sender %v)", ErrEmptyAuthList, msg.From)
 		}
-	}
-	// Verify tx gas limit does not exceed EIP-7825 cap.
-	if isOsaka && msg.GasLimit > params.MaxTxGas {
-		return fmt.Errorf("%w (cap: %d, tx: %d)", ErrGasLimitTooHigh, params.MaxTxGas, msg.GasLimit)
 	}
 	return st.buyGas()
 }
