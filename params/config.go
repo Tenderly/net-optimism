@@ -514,6 +514,9 @@ type ChainConfig struct {
 
 	InteropTime *uint64 `json:"interopTime,omitempty"` // Interop switch time (nil = no fork, 0 = already on optimism interop)
 
+	// Base forks, nil on non-Base chains
+	AzulTime *uint64 `json:"azulTime,omitempty"` // Azul switch time (nil = no fork, 0 = already on Base Azul)
+
 	// Zircuit forks
 	ZircuitMonoFeeBlock *big.Int `json:"zircuitMonoFeeBlock,omitempty"`
 	ZircuitTenrecTime   *uint64  `json:"zircuitTenrecTime,omitempty"`
@@ -695,6 +698,9 @@ func (c *ChainConfig) Description() string {
 	}
 	if c.InteropTime != nil {
 		banner += fmt.Sprintf(" - Interop:                     @%-10v\n", *c.InteropTime)
+	}
+	if c.AzulTime != nil {
+		banner += fmt.Sprintf(" - Azul:                        @%-10v\n", *c.AzulTime)
 	}
 	return banner
 }
@@ -909,6 +915,10 @@ func (c *ChainConfig) IsInterop(time uint64) bool {
 	return isTimestampForked(c.InteropTime, time)
 }
 
+func (c *ChainConfig) IsAzul(time uint64) bool {
+	return isTimestampForked(c.AzulTime, time)
+}
+
 // IsOptimism returns whether the node is an optimism node or not.
 func (c *ChainConfig) IsOptimism() bool {
 	return c.Optimism != nil
@@ -949,6 +959,11 @@ func (c *ChainConfig) IsOptimismIsthmus(time uint64) bool {
 
 func (c *ChainConfig) IsOptimismJovian(time uint64) bool {
 	return c.IsOptimism() && c.IsJovian(time)
+}
+
+// IsBaseAzul returns true iff this is an optimism-family node & the Base Azul fork is active
+func (c *ChainConfig) IsBaseAzul(time uint64) bool {
+	return c.IsOptimism() && c.IsAzul(time)
 }
 
 func (c *ChainConfig) IsZircuitMonoFee(number *big.Int) bool {
@@ -1234,6 +1249,9 @@ func (c *ChainConfig) checkCompatible(newcfg *ChainConfig, headNumber *big.Int, 
 	if isForkTimestampIncompatible(c.InteropTime, newcfg.InteropTime, headTimestamp, genesisTimestamp) {
 		return newTimestampCompatError("Interop fork timestamp", c.InteropTime, newcfg.InteropTime)
 	}
+	if isForkTimestampIncompatible(c.AzulTime, newcfg.AzulTime, headTimestamp, genesisTimestamp) {
+		return newTimestampCompatError("Azul fork timestamp", c.AzulTime, newcfg.AzulTime)
+	}
 	return nil
 }
 
@@ -1515,6 +1533,7 @@ type Rules struct {
 	IsOptimismCanyon, IsOptimismFjord                       bool
 	IsOptimismGranite, IsOptimismHolocene                   bool
 	IsOptimismIsthmus, IsOptimismJovian                     bool
+	IsBaseAzul                                              bool
 	IsZircuitMonoFee, IsZircuitTenrec                       bool
 }
 
@@ -1556,6 +1575,7 @@ func (c *ChainConfig) Rules(num *big.Int, isMerge bool, timestamp uint64) Rules 
 		IsOptimismHolocene: isMerge && c.IsOptimismHolocene(timestamp),
 		IsOptimismIsthmus:  isMerge && c.IsOptimismIsthmus(timestamp),
 		IsOptimismJovian:   isMerge && c.IsOptimismJovian(timestamp),
+		IsBaseAzul:         isMerge && c.IsBaseAzul(timestamp),
 		IsZircuitMonoFee:   isMerge && c.IsZircuitMonoFee(num),
 		IsZircuitTenrec:    isMerge && c.IsZircuitTenrec(timestamp),
 	}
@@ -1591,6 +1611,10 @@ func (c *ChainConfig) CheckOptimismValidity() error {
 	}
 	if !equalPtrValues(c.PragueTime, c.IsthmusTime) {
 		return fmt.Errorf("PragueTime (%s) must equal IsthmusTime (%s)", ptrValueString(c.PragueTime), ptrValueString(c.IsthmusTime))
+	}
+	// Azul implies the Osaka execution spec; OP chains may set OsakaTime without Azul (Karst).
+	if c.AzulTime != nil && !equalPtrValues(c.OsakaTime, c.AzulTime) {
+		return fmt.Errorf("OsakaTime (%s) must equal AzulTime (%s) when Azul is configured", ptrValueString(c.OsakaTime), ptrValueString(c.AzulTime))
 	}
 
 	return nil
